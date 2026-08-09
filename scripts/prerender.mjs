@@ -41,7 +41,8 @@ function escapeAttr(s) {
 }
 
 function render(route) {
-  const url = route.path === '/' ? `${SITE}/` : `${SITE}${route.path}`
+  // Pages serves these from a directory index, so the slashless form 301s.
+  const url = route.path === '/' ? `${SITE}/` : `${SITE}${route.path}/`
   const title = escapeAttr(route.title)
   const desc = escapeAttr(route.description)
 

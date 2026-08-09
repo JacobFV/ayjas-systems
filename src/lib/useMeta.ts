@@ -42,7 +42,9 @@ function setTag(
  */
 export function useMeta({ title, description, path }: Meta) {
   useEffect(() => {
-    const url = `${siteUrl}${path === '/' ? '/' : path}`
+    // Trailing slash: Pages serves each prerendered route from a directory
+    // index, so the slashless form 301s. Canonicals point at the 200.
+    const url = `${siteUrl}${path === '/' ? '/' : `${path}/`}`
     document.title = title
     setTag('meta[name="description"]', { name: 'description', content: description })
     setTag('link[rel="canonical"]', { rel: 'canonical', href: url })
