@@ -146,8 +146,10 @@ export default function Implementation() {
  */
 function PlaneStack() {
   const S = 150
-  const GAP = 46
+  const GAP = 62
+  const LABEL_X = 150 // shared label column, clear of every plate silhouette
   const top = GAP * (planes.length - 1)
+  const order = [...planes].reverse() // top plane painted first
 
   // Descends plane by plane: a lateral move inside each plane, then a drop to
   // the next. Same grammar as the homepage assembly, reduced to the sequence.
@@ -165,7 +167,7 @@ function PlaneStack() {
   return (
     <svg
       className="diagram"
-      viewBox="-150 -205 500 390"
+      viewBox="-150 -272 520 462"
       role="img"
       aria-label="Schematic of five stacked deployment planes, numbered one at the bottom through five at the top, with a single thread descending through all five."
     >
@@ -182,25 +184,37 @@ function PlaneStack() {
         })}
       </g>
 
-      {/* Painted top plane first so the lower planes overlap correctly. */}
-      {[...planes].reverse().map((p, i) => {
-        const z = GAP * (planes.length - 1 - i)
-        const right = iso(S, S / 2, z)
+      {/* Plates first, top-down, so each lower plane overlaps the one above. */}
+      {order.map((p, i) => (
+        <polygon
+          key={p.n}
+          points={pts(plate(S, GAP * (planes.length - 1 - i)))}
+          fill="#0b2724"
+          fillOpacity="0.92"
+          stroke="#6c8992"
+          strokeOpacity="0.6"
+        />
+      ))}
+
+      {/* Labels in a second pass — drawn inside the plate loop, a lower plate
+          would paint over the label belonging to the plane above it. */}
+      {order.map((p, i) => {
+        const right = iso(S, S / 2, GAP * (planes.length - 1 - i))
         return (
           <g key={p.n}>
-            <polygon
-              points={pts(plate(S, z))}
-              fill="#0b2724"
-              fillOpacity="0.92"
-              stroke="#6c8992"
-              strokeOpacity="0.6"
+            <line
+              x1={right[0]}
+              y1={right[1]}
+              x2={LABEL_X - 8}
+              y2={right[1]}
+              stroke="#1d4642"
+              strokeDasharray="2 3"
             />
-            <line x1={right[0]} y1={right[1]} x2={right[0] + 20} y2={right[1]} stroke="#1d4642" />
             <circle cx={right[0]} cy={right[1]} r="1.8" fill="#6c8992" />
-            <text x={right[0] + 26} y={right[1] - 1} fontSize="9" fill="#e6ece9">
+            <text x={LABEL_X} y={right[1] - 1} fontSize="9" fill="#e6ece9">
               {p.n}
             </text>
-            <text x={right[0] + 26} y={right[1] + 10} fontSize="8" fill="#6d8480">
+            <text x={LABEL_X} y={right[1] + 11} fontSize="8" fill="#6d8480">
               {p.name.toLowerCase()}
             </text>
           </g>
