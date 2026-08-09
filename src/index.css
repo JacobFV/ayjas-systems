@@ -711,6 +711,11 @@ ol {
 .scroll-x > table {
   min-width: 44rem;
 }
+/* Two-column tables read fine in a half-width column; forcing the 44rem floor
+   would clip them behind a scrollbar nobody notices. */
+.scroll-x--fluid > table {
+  min-width: 0;
+}
 
 /* ------------------------------------------------------------ key/value -- */
 

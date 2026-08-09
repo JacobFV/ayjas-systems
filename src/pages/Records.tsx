@@ -20,7 +20,7 @@ const SCHEMA: { field: string; rule: string }[] = [
     rule: 'A figure, its unit, its measurement window, and the report it came from. Published only when that report can be produced on request.',
   },
   { field: 'Baseline', rule: 'What the figure is measured against, and how the baseline was taken.' },
-  { field: 'Deployment period', rule: 'Actual start and end dates. No "recently" or "over several months".' },
+  { field: 'Deployment period', rule: 'Actual start and end dates. No “recently” or “over several months”.' },
   {
     field: 'Reference status',
     rule: 'Public, under NDA, or unavailable — stated explicitly, with the reason when unavailable.',
@@ -81,7 +81,7 @@ export default function Records() {
           />
 
           <div className="grid-2" style={{ alignItems: 'start' }}>
-            <div className="scroll-x">
+            <div className="scroll-x scroll-x--fluid">
               <table className="reg">
                 <caption>Record schema</caption>
                 <thead>
