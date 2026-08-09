@@ -31,10 +31,13 @@ export default function Capabilities() {
 
       <section className="section--tight surface-command">
         <div className="wrap">
-          <div className="cmap__stage" style={{ borderColor: 'var(--cmd-line)' }}>
+          <div
+            className="cmap__stage cmap__stage--wide"
+            style={{ borderColor: 'var(--cmd-line)' }}
+          >
             <ControlMap active={active} />
           </div>
-          <p className="uid" style={{ marginTop: '1rem' }}>
+          <p className="uid" style={{ marginTop: '1rem', textAlign: 'center' }}>
             Solid arrows: the path a request travels. Dashed indigo: a permission
             or domain boundary. Hover a control below to trace it.
           </p>

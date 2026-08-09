@@ -405,7 +405,7 @@ export const specimenRecord: EngagementRecord = {
   intervention:
     'Centralised intake with per-campus codes; two-step approval above a spend threshold; vendor accounts for four contractors.',
   measuredResult:
-    'Stated as a figure with the report that produced it — e.g. "median approval latency, measured from the audit record, first 90 days versus the preceding manual baseline."',
+    'Stated as a figure with the report that produced it — e.g. “median approval latency, measured from the audit record, first 90 days versus the preceding manual baseline.”',
   deploymentPeriod: 'Stated as an actual date range',
   referenceStatus: 'Public · under NDA · unavailable — stated explicitly',
 }

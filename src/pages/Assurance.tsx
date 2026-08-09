@@ -36,7 +36,7 @@ export default function Assurance() {
       <PageMast
         eyebrow="Assurance"
         title="What is held, what is not, and who says so"
-        lede="A procurement reviewer's job is to find the gap between a claim and its evidence. This page hands over the gaps directly, so the review is about whether the position is acceptable rather than whether it is honest."
+        lede="A procurement reviewer’s job is to find the gap between a claim and its evidence. This page hands over the gaps directly, so the review is about whether the position is acceptable rather than whether it is honest."
         rail={[
           { label: 'Control areas', value: String(assurance.length) },
           { label: 'Independently verified', value: `${verified} — none yet` },
@@ -111,10 +111,20 @@ export default function Assurance() {
                     <td>
                       <AssuranceChip state={r.state} />
                     </td>
-                    <td className="uid">
-                      <Value v={r.owner} label="Owner" />
-                      <br />
-                      <Value v={r.reviewed} label="Last reviewed" />
+                    <td className="uid" style={{ whiteSpace: 'nowrap' }}>
+                      <span style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                        Owner <Value v={r.owner} label="Owner" compact />
+                      </span>
+                      <span
+                        style={{
+                          display: 'flex',
+                          gap: '0.4rem',
+                          alignItems: 'center',
+                          marginTop: '0.2rem',
+                        }}
+                      >
+                        Reviewed <Value v={r.reviewed} label="Last reviewed" compact />
+                      </span>
                     </td>
                   </tr>
                 ))}

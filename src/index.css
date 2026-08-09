@@ -560,6 +560,22 @@ ol {
 .surface-command-deep .pending {
   color: var(--cmd-text-faint);
 }
+/* Table-cell variant: the hatch mark carries the meaning, the words move to the
+   accessibility tree so twelve rows of "not published" do not shout. */
+.pending--tight::before {
+  width: 1.75rem;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 .pending::before {
   content: '';
   width: 2.25rem;
@@ -1013,7 +1029,6 @@ ol {
 .diagram {
   width: 100%;
   height: auto;
-  overflow: visible;
 }
 .diagram text {
   font-family: var(--font-mono);
@@ -1116,6 +1131,12 @@ ol {
   background: var(--cmd-900);
   padding: clamp(1rem, 2.5vw, 2rem);
   overflow: hidden;
+}
+/* Full-bleed variant: the map has a fixed aspect ratio, so letting it fill a
+   1280px column would make it taller than the viewport for no added legibility. */
+.cmap__stage--wide {
+  max-width: 56rem;
+  margin-inline: auto;
 }
 
 /* --------------------------------------------------------------- planes -- */
@@ -1398,5 +1419,18 @@ ol {
   .js .reveal[data-shown='true'] {
     opacity: 1;
     transform: none;
+  }
+}
+
+/* Closing CTA panel: statement left, what-you-get plus controls right. */
+.closer {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+@media (min-width: 860px) {
+  .closer {
+    grid-template-columns: 1.15fr 1fr;
   }
 }

@@ -15,11 +15,21 @@ import {
  * caller substitute placeholder prose: the only two options are a real value or
  * a visible gap.
  */
-export function Value({ v, label }: { v: Maybe; label?: string }) {
+export function Value({
+  v,
+  label,
+  compact,
+}: {
+  v: Maybe
+  label?: string
+  /** Hatch mark only, for dense table cells. The words stay in the a11y tree. */
+  compact?: boolean
+}) {
   if (v === PENDING) {
+    const title = label ? `${label}: not yet published` : 'Not yet published'
     return (
-      <span className="pending" title={label ? `${label}: not yet published` : 'Not yet published'}>
-        not published
+      <span className={compact ? 'pending pending--tight' : 'pending'} title={title}>
+        <span className={compact ? 'sr-only' : undefined}>not published</span>
       </span>
     )
   }
@@ -173,7 +183,14 @@ export function Reveal({
       { rootMargin: '0px 0px -8% 0px', threshold: 0.01 },
     )
     io.observe(el)
-    return () => io.disconnect()
+    // Safety net: content must never be able to stay hidden behind an animation
+    // that did not fire. If the observer has not reported in a second, show it
+    // anyway — the transition is polish, not a gate on reading the page.
+    const t = window.setTimeout(() => setShown(true), 1000)
+    return () => {
+      io.disconnect()
+      window.clearTimeout(t)
+    }
   }, [shown])
 
   return (

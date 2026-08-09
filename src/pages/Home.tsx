@@ -367,31 +367,57 @@ export default function Home() {
                 <p className="dim" style={{ fontSize: 'var(--step--1)', lineHeight: 1.55 }}>
                   {d.summary}
                 </p>
-                <p className="uid" style={{ marginTop: '0.9rem' }}>
-                  Rev <Value v={d.revision} label="Revision" /> · Owner{' '}
-                  <Value v={d.owner} label="Owner" />
-                </p>
+                <div className="uid" style={{ marginTop: '0.9rem', display: 'grid', gap: '0.3rem' }}>
+                  <span style={{ display: 'flex', gap: '0.45rem', alignItems: 'center' }}>
+                    Rev <Value v={d.revision} label="Revision" compact />
+                  </span>
+                  <span style={{ display: 'flex', gap: '0.45rem', alignItems: 'center' }}>
+                    Owner <Value v={d.owner} label="Owner" compact />
+                  </span>
+                </div>
               </div>
             ))}
           </div>
 
-          <div
-            className="card"
-            style={{ marginTop: '2.25rem', display: 'grid', gap: '1rem' }}
-          >
-            <h3 className="display display--md">Request the brief</h3>
-            <p className="lede" style={{ maxWidth: '54ch' }}>
-              Tell us the institution, the request types you are trying to get
-              under control, and who has to sign off. We reply with an
-              implementation brief scoped to that, or we tell you it is not a fit.
-            </p>
-            <div className="btn-row">
-              <Link to="/contact" className="btn btn--primary">
-                Request procurement brief
-              </Link>
-              <Link to="/procurement" className="btn">
-                Vendor identifiers ↗
-              </Link>
+          <div className="card closer" style={{ marginTop: '2.25rem' }}>
+            <div>
+              <h3 className="display display--md" style={{ marginBottom: '0.85rem' }}>
+                Request the brief
+              </h3>
+              <p className="lede" style={{ maxWidth: '46ch' }}>
+                Tell us the institution, the request types you are trying to get
+                under control, and who has to sign off. We reply with an
+                implementation brief scoped to that, or we tell you it is not a
+                fit.
+              </p>
+            </div>
+            <div>
+              <p className="eyebrow" style={{ marginBottom: '0.8rem' }}>
+                What comes back
+              </p>
+              <ul
+                className="stack"
+                style={
+                  {
+                    '--gap': '0.5rem',
+                    fontSize: 'var(--step--1)',
+                    color: 'var(--cmd-text-dim)',
+                    marginBottom: '1.5rem',
+                  } as React.CSSProperties
+                }
+              >
+                <li>A reply from a person within two working days.</li>
+                <li>Scope, acceptance criteria, and what we would need from you.</li>
+                <li>Or a straight no, with the reason.</li>
+              </ul>
+              <div className="btn-row">
+                <Link to="/contact" className="btn btn--primary">
+                  Request procurement brief
+                </Link>
+                <Link to="/procurement" className="btn">
+                  Vendor identifiers ↗
+                </Link>
+              </div>
             </div>
           </div>
         </div>
