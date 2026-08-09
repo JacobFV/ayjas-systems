@@ -169,15 +169,18 @@ export function Figure({
   caption,
   children,
   id,
+  className,
 }: {
   /** Figure number within the part, e.g. "1.1". */
   no: string
   caption: ReactNode
   children: ReactNode
   id?: string
+  /** e.g. `figure--plate` to cap a square plate's height. */
+  className?: string
 }) {
   return (
-    <figure className="figure" id={id}>
+    <figure className={['figure', className].filter(Boolean).join(' ')} id={id}>
       <div className="figure__plate panel-ink">{children}</div>
       <figcaption className="figure__cap">
         <span className="figure__no">Figure {no}</span>

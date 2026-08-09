@@ -16,7 +16,6 @@ import {
 import {
   assurance,
   controls,
-  doc,
   evidenceRail,
   partByPath,
   parts,
@@ -104,6 +103,7 @@ export default function Home() {
           />
 
           <Figure
+            className="figure--plate"
             no="1.1"
             caption={
               <>
@@ -170,9 +170,6 @@ export default function Home() {
                 <span className="toc__no">§ {p.n}</span>
                 <span className="toc__title">{p.title}</span>
                 <span className="toc__desc">{p.desc}</span>
-                <span className="toc__id">
-                  {doc.id.split('-').slice(-1)[0]}.{p.n}
-                </span>
               </Link>
             ))}
           </div>

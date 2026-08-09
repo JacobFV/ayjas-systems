@@ -232,6 +232,11 @@ ol {
 
 /* ---------------------------------------------------------------- layout -- */
 
+/* Anchored sections clear the sticky letterhead. */
+[id] {
+  scroll-margin-top: 7.5rem;
+}
+
 .wrap {
   width: 100%;
   max-width: var(--measure);
@@ -607,6 +612,11 @@ a.xref:hover {
    This is the only place the dark surface appears in the body of the document. */
 .figure {
   margin: 0;
+}
+/* Capped so a square plate cannot grow taller than the viewport, and wide enough
+   that the 9px annotation type inside still sets legibly. */
+.figure--plate {
+  max-width: 44rem;
 }
 .figure__plate {
   border: 1px solid var(--rule-strong);
@@ -1073,12 +1083,14 @@ a.xref:hover {
 }
 @media (min-width: 980px) {
   .cmap {
-    grid-template-columns: minmax(0, 1fr) 20rem;
+    grid-template-columns: 21rem minmax(0, 1fr);
     gap: clamp(1.75rem, 3vw, 3rem);
   }
+  /* Sticky: the list of six controls is taller than the map, and hovering the
+     last one has to illuminate a map you can still see. */
   .cmap__figure {
     position: sticky;
-    top: 5rem;
+    top: 7.5rem;
   }
 }
 .cmap__list {
@@ -1272,7 +1284,7 @@ a.xref:hover {
 }
 @media (min-width: 760px) {
   .toc__item {
-    grid-template-columns: 5.5rem minmax(0, 20rem) minmax(0, 1fr) 6rem;
+    grid-template-columns: 5.5rem minmax(0, 20rem) minmax(0, 1fr);
     align-items: baseline;
   }
 }
