@@ -1,15 +1,10 @@
 import { Link } from 'react-router-dom'
 import { DocChip, KV, PageMast, Part, Value } from '../components/primitives'
 import { org, procurementDocs, PENDING } from '../content/site'
-import { useMeta } from '../lib/useMeta'
+import { routeMeta, useMeta } from '../lib/useMeta'
 
 export default function Procurement() {
-  useMeta({
-    title: 'Procurement — Ayjas Systems',
-    description:
-      'Procurement document drawer with an owner, revision, and availability state per document, plus vendor identifiers and the contracting contact for Ayjas Systems.',
-    path: '/procurement',
-  })
+  useMeta(routeMeta('/procurement'))
 
   const available = procurementDocs.filter((d) => d.state === 'available').length
 

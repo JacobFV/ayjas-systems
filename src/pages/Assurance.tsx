@@ -6,7 +6,7 @@ import {
   subprocessors,
   type AssuranceState,
 } from '../content/site'
-import { useMeta } from '../lib/useMeta'
+import { routeMeta, useMeta } from '../lib/useMeta'
 
 const LEGEND: { state: AssuranceState; meaning: string }[] = [
   { state: 'verified', meaning: 'Confirmed by a party other than Ayjas Systems.' },
@@ -21,12 +21,7 @@ const LEGEND: { state: AssuranceState; meaning: string }[] = [
 ]
 
 export default function Assurance() {
-  useMeta({
-    title: 'Assurance register — Ayjas Systems',
-    description:
-      'Twelve control areas with an explicit assurance state each, including the areas where Ayjas Systems holds nothing: no SOC 2 audit, no ISO 27001 certification, and no third-party penetration test.',
-    path: '/assurance',
-  })
+  useMeta(routeMeta('/assurance'))
 
   const verified = assurance.filter((r) => r.state === 'verified').length
   const none = assurance.filter((r) => r.state === 'none').length

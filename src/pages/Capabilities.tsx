@@ -3,15 +3,10 @@ import { Link } from 'react-router-dom'
 import ControlMap from '../components/ControlMap'
 import { PageMast, Part, Reveal } from '../components/primitives'
 import { controls, reports } from '../content/site'
-import { useMeta } from '../lib/useMeta'
+import { routeMeta, useMeta } from '../lib/useMeta'
 
 export default function Capabilities() {
-  useMeta({
-    title: 'Capabilities — Ayjas Systems',
-    description:
-      'The six control areas of the Ayjas operations system — intake, approval routing, role-based access, vendor assignment, service-level tracking, and audit — specified as observable behaviour, plus the standard report set.',
-    path: '/capabilities',
-  })
+  useMeta(routeMeta('/capabilities'))
 
   const [active, setActive] = useState<string | null>(null)
 

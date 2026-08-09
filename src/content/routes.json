@@ -1,0 +1,37 @@
+[
+  {
+    "path": "/",
+    "title": "Ayjas Systems — operational software for institutions",
+    "description": "Ayjas Systems builds one configurable system for service requests, approvals, vendor coordination, and reporting, deployed for a single institution at a time. Every assurance claim on this site carries an explicit state."
+  },
+  {
+    "path": "/capabilities",
+    "title": "Capabilities — Ayjas Systems",
+    "description": "The six control areas of the Ayjas operations system — intake, approval routing, role-based access, vendor assignment, service-level tracking, and audit — specified as observable behaviour, plus the standard report set."
+  },
+  {
+    "path": "/assurance",
+    "title": "Assurance register — Ayjas Systems",
+    "description": "Twelve control areas with an explicit assurance state each, including the areas where Ayjas Systems holds nothing: no SOC 2 audit, no ISO 27001 certification, and no third-party penetration test."
+  },
+  {
+    "path": "/implementation",
+    "title": "Implementation — Ayjas Systems",
+    "description": "Five deployment planes — discovery, workflow and permission model, configuration, controlled rollout, and monitoring — each with declared inputs, outputs, responsible parties, and an acceptance condition."
+  },
+  {
+    "path": "/records",
+    "title": "Engagement register — Ayjas Systems",
+    "description": "Ayjas Systems publishes no anonymous case studies, unnamed logos, or unverifiable metrics. The engagement register is currently empty; this page states the record format, the publication policy, and the reason."
+  },
+  {
+    "path": "/procurement",
+    "title": "Procurement — Ayjas Systems",
+    "description": "Procurement document drawer with an owner, revision, and availability state per document, plus vendor identifiers and the contracting contact for Ayjas Systems."
+  },
+  {
+    "path": "/contact",
+    "title": "Contact & procurement brief — Ayjas Systems",
+    "description": "Request a procurement brief, a security overview, or a live working session from Ayjas Systems. Lagos, Nigeria — Monday to Friday, 09:00 to 18:00 WAT."
+  }
+]

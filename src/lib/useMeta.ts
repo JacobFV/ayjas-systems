@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import routes from '../content/routes.json'
 import { siteUrl } from '../content/site'
 
 type Meta = {
@@ -6,6 +7,18 @@ type Meta = {
   description: string
   /** Route path, e.g. "/assurance". Used to build the canonical URL. */
   path: string
+}
+
+/**
+ * Route metadata lives in routes.json because two consumers need it: this hook,
+ * and scripts/prerender.mjs, which writes a real HTML file per route at build
+ * time so deep links return 200 with correct head tags instead of the SPA
+ * shell under a 404.
+ */
+export function routeMeta(path: string): Meta {
+  const found = (routes as Meta[]).find((r) => r.path === path)
+  if (!found) throw new Error(`routes.json has no entry for "${path}"`)
+  return found
 }
 
 function setTag(
@@ -23,10 +36,9 @@ function setTag(
 }
 
 /**
- * Per-route document metadata. The static index.html carries a full default set,
- * so a crawler that never runs JavaScript still gets a title, description,
- * canonical, and social card; this hook keeps them correct as the user
- * navigates.
+ * Per-route document metadata. Each prerendered HTML file already carries the
+ * right tags for a crawler that never runs JavaScript; this keeps them correct
+ * as a visitor navigates within the app.
  */
 export function useMeta({ title, description, path }: Meta) {
   useEffect(() => {

@@ -112,10 +112,11 @@ illuminates a node and its incident edges when you hover the matching control.
   `aria-live` on the form result, `<title>`/`<desc>` on every diagram.
 - Wide tables scroll inside their own container; the page body never scrolls
   horizontally.
-- Per-route `<title>`, description, canonical, and Open Graph tags; a static
-  fallback set in `index.html` for crawlers that do not run JavaScript, plus a
-  substantive `<noscript>` block with the offer, the assurance position, and the
-  contact address.
+- Every route is prerendered to its own HTML file at build time, so deep links
+  return 200 with their own `<title>`, description, canonical, and Open Graph
+  tags — no crawler has to run JavaScript to see them. Plus a substantive
+  `<noscript>` block with the offer, the assurance position, and the contact
+  address.
 
 ### The contact form
 
@@ -165,7 +166,7 @@ more trust than a missing one.
 ```bash
 npm install
 npm run dev        # http://localhost:5173/ayjas-systems/
-npm run build      # tsc -b && vite build && SPA 404 fallback
+npm run build      # tsc -b && vite build && prerender each route
 npm run preview    # serve dist/
 npm run lint
 npm run og         # regenerate public/og.png (needs ImageMagick)
@@ -178,14 +179,22 @@ path.
 ## Deployment
 
 `.github/workflows/deploy.yml` builds on every push to `main` and publishes
-`dist/` to GitHub Pages. Because Pages has no rewrite rules, the build copies
-`index.html` to `404.html` so deep links resolve in the client router.
+`dist/` to GitHub Pages.
+
+Pages has no rewrite rules, so `scripts/prerender.mjs` writes a real
+`dist/<route>/index.html` for each entry in `src/content/routes.json`, with that
+route's head tags substituted in. `routes.json` is the single source shared by
+the build script and the `useMeta` hook, so the two cannot drift. The script
+throws if `index.html`'s head markup changes in a way it cannot rewrite —
+shipping seven pages that all claim to be the homepage is worse than a failed
+build. `404.html` is still emitted for genuinely unknown paths.
 
 ## Structure
 
 ```
 src/
   content/site.ts     every factual claim, with an explicit state per claim
+  content/routes.json per-route head metadata, shared with the build script
   lib/iso.ts          axonometric projection helpers
   lib/useMeta.ts      per-route document metadata
   components/

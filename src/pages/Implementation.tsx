@@ -1,16 +1,11 @@
 import { Link } from 'react-router-dom'
 import { PageMast, Part, Reveal, Value } from '../components/primitives'
 import { planes } from '../content/site'
-import { useMeta } from '../lib/useMeta'
+import { routeMeta, useMeta } from '../lib/useMeta'
 import { iso, path, pts, plate } from '../lib/iso'
 
 export default function Implementation() {
-  useMeta({
-    title: 'Implementation — Ayjas Systems',
-    description:
-      'Five deployment planes — discovery, workflow and permission model, configuration, controlled rollout, and monitoring — each with declared inputs, outputs, responsible parties, and an acceptance condition.',
-    path: '/implementation',
-  })
+  useMeta(routeMeta('/implementation'))
 
   return (
     <>

@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { KV, PageMast, Part } from '../components/primitives'
 import { org, procurementDocs } from '../content/site'
-import { useMeta } from '../lib/useMeta'
+import { routeMeta, useMeta } from '../lib/useMeta'
 
 /**
  * The site is statically hosted, so there is no server to accept a POST. Rather
@@ -26,12 +26,7 @@ const ENQUIRY_TYPES = [
 ] as const
 
 export default function Contact() {
-  useMeta({
-    title: 'Contact & procurement brief — Ayjas Systems',
-    description:
-      'Request a procurement brief, a security overview, or a live working session from Ayjas Systems. Lagos, Nigeria — Monday to Friday, 09:00 to 18:00 WAT.',
-    path: '/contact',
-  })
+  useMeta(routeMeta('/contact'))
 
   const [params] = useSearchParams()
   const requestedDoc = params.get('doc')

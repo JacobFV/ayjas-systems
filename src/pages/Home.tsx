@@ -13,15 +13,10 @@ import {
   recordRegister,
   specimenRecord,
 } from '../content/site'
-import { useMeta } from '../lib/useMeta'
+import { routeMeta, useMeta } from '../lib/useMeta'
 
 export default function Home() {
-  useMeta({
-    title: 'Ayjas Systems — operational software for institutions',
-    description:
-      'Ayjas Systems builds one configurable system for service requests, approvals, vendor coordination, and reporting, deployed for a single institution at a time. Every assurance claim on this site carries an explicit state.',
-    path: '/',
-  })
+  useMeta(routeMeta('/'))
 
   const [active, setActive] = useState<string | null>(null)
 

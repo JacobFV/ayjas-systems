@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { PageMast, Part, Value } from '../components/primitives'
 import { recordRegister, specimenRecord } from '../content/site'
-import { useMeta } from '../lib/useMeta'
+import { routeMeta, useMeta } from '../lib/useMeta'
 
 const SCHEMA: { field: string; rule: string }[] = [
   { field: 'Engagement ID', rule: 'Assigned at contract signature. Never reused.' },
@@ -28,12 +28,7 @@ const SCHEMA: { field: string; rule: string }[] = [
 ]
 
 export default function Records() {
-  useMeta({
-    title: 'Engagement register — Ayjas Systems',
-    description:
-      'Ayjas Systems publishes no anonymous case studies, unnamed logos, or unverifiable metrics. The engagement register is currently empty; this page states the record format, the publication policy, and the reason.',
-    path: '/records',
-  })
+  useMeta(routeMeta('/records'))
 
   return (
     <>
