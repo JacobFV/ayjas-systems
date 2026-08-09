@@ -40,11 +40,11 @@ export default function Procurement() {
                   <p className="docrow__sum">{d.summary}</p>
                 </div>
                 <div className="docrow__meta">
-                  <span>
-                    REV <Value v={d.revision} label="Revision" />
+                  <span style={{ display: 'flex', gap: '0.45rem', alignItems: 'center' }}>
+                    REV <Value v={d.revision} label="Revision" compact />
                   </span>
-                  <span>
-                    OWNER <Value v={d.owner} label="Owner" />
+                  <span style={{ display: 'flex', gap: '0.45rem', alignItems: 'center' }}>
+                    OWNER <Value v={d.owner} label="Owner" compact />
                   </span>
                 </div>
                 <div style={{ display: 'grid', gap: '0.6rem', justifyItems: 'start' }}>
