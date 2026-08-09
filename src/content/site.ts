@@ -41,6 +41,113 @@ export const ASSURANCE_LABEL: Record<AssuranceState, string> = {
   verified: 'Independently verified',
 }
 
+/* ------------------------------------------------------------- document --- */
+
+/**
+ * The site is one controlled document in seven parts, not seven pages.
+ *
+ * That framing is doing real work: it makes every heading citable (§ 3.1), every
+ * table and figure numbered, and every claim attributable to a revision and an
+ * issue date. A reviewer can quote this document back at us, which is precisely
+ * the accountability the product is meant to provide.
+ *
+ * `issued` is the genuine date of first issue. `preparedBy` and `approvedBy` are
+ * PENDING because no person has yet put their name to it — a document-control
+ * block with those fields empty is what a draft honestly looks like.
+ */
+export const doc = {
+  id: 'AIS-OPS-2026-01',
+  title: 'Operational systems dossier',
+  revision: '1.0',
+  issued: '2026-08-09',
+  classification: 'Public',
+  preparedBy: PENDING as Maybe,
+  approvedBy: PENDING as Maybe,
+} as const
+
+/** Formal statement of what this document is and is not. */
+export const limitations = [
+  'This document describes the behaviour of the Ayjas operations system, and the assurance position of Ayjas Systems, as at the issue date recorded above. It is a description, not a warranty, not an attestation, and not a certification.',
+  'Where a control area is recorded as not held, no equivalent control should be inferred. Where a field is recorded as not published, it is unfilled rather than withheld, and will be supplied on request if it exists.',
+  'No engagement record, client name, or measured result appears anywhere in this document, because none has been cleared for publication. Statements about the future are commitments, not evidence, and are marked as such.',
+] as const
+
+export type Part = {
+  n: string
+  to: string
+  short: string
+  title: string
+  desc: string
+}
+
+/** Register of parts — the contents of the document, and the site's navigation. */
+export const parts: Part[] = [
+  {
+    n: '1',
+    to: '/',
+    short: 'Purpose',
+    title: 'Purpose and system',
+    desc: 'What the system is, what a deployment includes, and what is out of scope.',
+  },
+  {
+    n: '2',
+    to: '/capabilities',
+    short: 'Controls',
+    title: 'Control specification',
+    desc: 'Six control areas as observable behaviour, and the standard report set.',
+  },
+  {
+    n: '3',
+    to: '/assurance',
+    short: 'Assurance',
+    title: 'Assurance register',
+    desc: 'Twelve control areas with a state each, including those where nothing is held.',
+  },
+  {
+    n: '4',
+    to: '/implementation',
+    short: 'Deployment',
+    title: 'Implementation',
+    desc: 'Five deployment planes with inputs, artefacts, owners, and acceptance conditions.',
+  },
+  {
+    n: '5',
+    to: '/records',
+    short: 'Records',
+    title: 'Engagement register',
+    desc: 'The record format and publication policy. The register is empty.',
+  },
+  {
+    n: '6',
+    to: '/procurement',
+    short: 'Procurement',
+    title: 'Procurement',
+    desc: 'Document drawer with availability states, and entity identifiers.',
+  },
+  {
+    n: '7',
+    to: '/contact',
+    short: 'Enquiry',
+    title: 'Enquiry and contact',
+    desc: 'How to request a brief, a document, or a working session.',
+  },
+]
+
+export const partByPath = (path: string): Part => {
+  const found = parts.find((p) => p.to === path)
+  if (!found) throw new Error(`No part registered for "${path}"`)
+  return found
+}
+
+/** Revision history. One row per issue; append, never rewrite. */
+export const revisions: { rev: string; date: string; note: string }[] = [
+  {
+    rev: '1.0',
+    date: '2026-08-09',
+    note: 'First issue. Supersedes all earlier published material, including the SOC 2, FERPA, and “trusted by agencies” claims, which are withdrawn (see § 3.2).',
+  },
+]
+
 /* ------------------------------------------------------------------ org --- */
 
 export const org = {
@@ -657,15 +764,5 @@ export const reports: { id: string; name: string; grain: string; fields: string 
     fields: 'record · actor · timestamp · field · previous · new',
   },
 ]
-
-/* ------------------------------------------------------------------ nav --- */
-
-export const nav = [
-  { to: '/capabilities', label: 'Capabilities' },
-  { to: '/assurance', label: 'Assurance' },
-  { to: '/implementation', label: 'Implementation' },
-  { to: '/records', label: 'Records' },
-  { to: '/procurement', label: 'Procurement' },
-] as const
 
 export const siteUrl = 'https://jacobfv.github.io/ayjas-systems'

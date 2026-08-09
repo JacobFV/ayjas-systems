@@ -1,9 +1,18 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import ControlMap from '../components/ControlMap'
-import { PageMast, Part, Reveal } from '../components/primitives'
-import { controls, reports } from '../content/site'
+import {
+  Figure,
+  PageMast,
+  RevisionFoot,
+  Reveal,
+  SectionHead,
+  TableHead,
+} from '../components/primitives'
+import { controls, partByPath, reports } from '../content/site'
 import { routeMeta, useMeta } from '../lib/useMeta'
+
+const PART = partByPath('/capabilities')
 
 export default function Capabilities() {
   useMeta(routeMeta('/capabilities'))
@@ -13,9 +22,9 @@ export default function Capabilities() {
   return (
     <>
       <PageMast
-        eyebrow="Control specification"
+        part={PART}
         title="Six control areas, specified as behaviour"
-        lede="This page describes what the system does, in the present tense, at the level of detail an operations lead can check against their own process. It contains no benefit claims, because a benefit claim cannot be verified in a demo."
+        lede="This part records what the system does, in the present tense, at the level of detail an operations lead can check against their own process. It contains no benefit claims, because a benefit claim cannot be verified in a demonstration."
         rail={[
           { label: 'Control areas', value: String(controls.length) },
           { label: 'Standard reports', value: String(reports.length) },
@@ -24,37 +33,36 @@ export default function Capabilities() {
         ]}
       />
 
-      <section className="section--tight surface-command">
+      <section className="sheet section" id="map">
         <div className="wrap">
-          <div
-            className="cmap__stage cmap__stage--wide"
-            style={{ borderColor: 'var(--cmd-line)' }}
-          >
-            <ControlMap active={active} />
+          <SectionHead
+            no="2.1"
+            aside="figure 2.1"
+            title="Control map"
+            lede="How the six areas connect. Hover a control in § 2.2 to trace it."
+          />
+          <div style={{ maxWidth: '56rem' }}>
+            <Figure
+              no="2.1"
+              caption="Control map. Solid arrows: the path a request travels. Dashed: a permission or domain boundary. Every stage writes to the audit record; nothing writes over it."
+            >
+              <ControlMap active={active} />
+            </Figure>
           </div>
-          <p className="uid" style={{ marginTop: '1rem', textAlign: 'center' }}>
-            Solid arrows: the path a request travels. Dashed indigo: a permission
-            or domain boundary. Hover a control below to trace it.
-          </p>
         </div>
       </section>
 
-      <section className="section surface-document">
+      <section className="sheet sheet--raised section" id="register">
         <div className="wrap">
-          <Part
-            index="Control register"
+          <SectionHead
+            no="2.2"
             aside={`${controls.length} areas`}
-            title="What each area does"
+            title="Control register"
           />
 
           <div onMouseLeave={() => setActive(null)}>
             {controls.map((c) => (
-              <Reveal
-                as="section"
-                className="plane"
-                key={c.id}
-                // Hovering a specification block lights its node in the map above.
-              >
+              <Reveal as="section" className="plane" key={c.id}>
                 <div
                   className="plane__head"
                   onMouseEnter={() => setActive(c.node)}
@@ -72,12 +80,12 @@ export default function Capabilities() {
                       fontSize: 'var(--step-1)',
                       lineHeight: 1.55,
                       color: 'var(--ink-800)',
-                      maxWidth: '60ch',
+                      maxWidth: '58ch',
                     }}
                   >
                     {c.behaviour}
                   </p>
-                  <ul className="tick" style={{ marginTop: '1.25rem' }}>
+                  <ul className="tick" style={{ marginTop: '1.1rem' }}>
                     {c.detail.map((d) => (
                       <li key={d}>{d}</li>
                     ))}
@@ -89,21 +97,21 @@ export default function Capabilities() {
         </div>
       </section>
 
-      <section className="section surface-document-pale" id="reports">
+      <section className="sheet section" id="reports">
         <div className="wrap">
-          <Part
-            index="Reporting"
-            aside="derived from the audit record"
-            title="Standard report set"
-            lede="Reports are not a separate data store. Each one is a query over the append-only record, which is why an export can carry the query, the run time, and the actor who ran it."
+          <SectionHead
+            no="2.3"
+            aside="table 2.1"
+            title="Standard reports"
+            lede="Reports are not a separate data store. Each is a query over the append-only record, which is why an export can carry the query, the run time, and the actor who ran it."
           />
 
+          <TableHead no="2.1" title="Report definitions" note={`${reports.length} reports`} />
           <div className="scroll-x">
             <table className="reg">
-              <caption>Report definitions</caption>
               <thead>
                 <tr>
-                  <th scope="col">ID</th>
+                  <th scope="col">Ref</th>
                   <th scope="col">Report</th>
                   <th scope="col">Grain</th>
                   <th scope="col">Fields</th>
@@ -124,23 +132,25 @@ export default function Capabilities() {
             </table>
           </div>
 
-          <div className="notice" style={{ marginTop: '1.75rem', maxWidth: '72ch' }}>
-            No product screenshots appear on this site. The interface is
-            demonstrated live, against a configured staging deployment, in a
-            session you schedule — not as a marketing image that may not match
-            what ships.
+          <div className="notice" style={{ marginTop: '1.75rem', maxWidth: '78ch' }}>
+            <strong>Note on product imagery.</strong> No screenshots appear
+            anywhere in this document. The interface is demonstrated live against a
+            configured staging deployment, in a session you schedule, rather than
+            as a marketing image that may not match what ships.
           </div>
 
-          <div className="btn-row" style={{ marginTop: '1.75rem' }}>
-            <Link to="/contact" className="btn btn--solid-ink">
-              Schedule a working session
+          <div className="btn-row" style={{ marginTop: '1.5rem' }}>
+            <Link to="/contact" className="btn btn--primary">
+              § 7 — Schedule a working session
             </Link>
-            <Link to="/assurance" className="btn btn--ink">
-              Assurance register
+            <Link to="/assurance" className="btn">
+              § 3 — Assurance register
             </Link>
           </div>
         </div>
       </section>
+
+      <RevisionFoot part={PART} />
     </>
   )
 }

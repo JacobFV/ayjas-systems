@@ -72,33 +72,58 @@ and it is built so the UI *cannot* overstate:
   claims.
 
 An openly incomplete record is more credible than a completed fiction. That is
-the whole design thesis, and it is why the site has six dense pages instead of
-forty thin ones.
+the whole design thesis, and it is why the document has seven dense parts
+instead of forty thin pages.
 
-### Design system
+### It is set as a document, not a landing page
 
-Two registers, switched deliberately so the reader feels the epistemic mode
-change between promise and evidence:
+The first pass of this rebuild still read as a startup site: mint-teal accent, a
+radial glow behind the hero, gradient cards, rounded 12px panels, and a filled
+accent CTA pinned to the nav. Those are the tells, and no amount of sober copy
+survives them. So the whole visual register is now a **controlled document**.
 
-| Register | Surface | Used for |
-| --- | --- | --- |
-| Command | near-black teal, coordinate grid, restrained bloom | claims, diagrams, live state, procurement drawer |
-| Document | warm ivory, drafting-paper grid | registers, records, implementation, evidence |
+The apparatus is the argument:
 
-Chroma is rationed. Vermilion marks routing and intervention only — in the hero
-diagram it is the one saturated line, tracing a single request down through five
-planes. Cyan marks verified or active state. Indigo marks permission and domain
-boundaries. Nothing else is coloured.
+- **One document, seven parts.** `AIS-OPS-2026-01`, *Operational systems
+  dossier*, revision 1.0. The nav is its table of contents; each page is a
+  numbered part.
+- **A document-control block** on every part: document, title, part, revision,
+  date of issue, classification, prepared by, approved by. The last two are
+  visibly unfilled, because nobody has yet put their name to it — which is what
+  a draft honestly looks like.
+- **Numbered sections, figures, and tables** — § 3.2, Figure 1.1, Table 3.1 —
+  so a reviewer can quote the document back at us. Cross-references are real
+  links.
+- **A “status of this document” statement** stating plainly that it is a
+  description, not a warranty, attestation, or certification.
+- **Revision history** at the foot of every part, and a running footer carrying
+  the document ID, revision, issue date, part, and classification.
 
-Type: Newsreader for display, IBM Plex Sans for interface, IBM Plex Mono for
-identifiers and states. Radius hierarchy: documents 2–4px, controls 6px, major
-surfaces 12px. Fonts are self-hosted from npm, so there is no third-party
-request on load.
+**Five values, and no others.** Paper (warm ivory) is the default surface. Ink
+(near-black) is the only dark, used both as type and as a panel fill. Steel
+carries linework. Stamp red marks annotation, routing, and intervention —
+nothing decorative. Archival blue marks verified or active state, and never as a
+glow: emphasis is a doubled rule, the way a printed register marks a confirmed
+line. There are no gradients, no shadows, no glassmorphism, and no filled accent
+buttons — primary action is ink, because on paper the strongest thing available
+is black. Corners are square; controls get 2px and nothing else gets any.
+
+Surface tokens are semantic and get redefined inside `.panel-ink`, so every
+component is written once and works on either stock — there is not a single
+`.surface-x .component` override in the stylesheet.
+
+Type: Newsreader for display, IBM Plex Sans for running text, IBM Plex Mono for
+every identifier, label, state, and control. Fonts are self-hosted from npm, so
+there is no third-party request on load.
 
 Diagrams are hand-authored SVG over a 30° axonometric projection
-([`src/lib/iso.ts`](src/lib/iso.ts)) — 40 lines of maths, no 3D library. The
-homepage assembly explodes a deployment into five planes; the control map
-illuminates a node and its incident edges when you hover the matching control.
+([`src/lib/iso.ts`](src/lib/iso.ts)) — 40 lines of maths, no 3D library — and
+they appear as **plates**: an ink panel, ruled, with a numbered caption beneath.
+That is the only place the dark surface appears in the body of the document, so
+they read as figures in a printed report rather than as hero art. Figure 1.1
+explodes a deployment into five planes and traces one request through all of
+them; Figure 1.2 illuminates a node and its incident edges when you hover the
+matching control.
 
 ### Accessibility and load behaviour
 
@@ -200,8 +225,9 @@ src/
   components/
     SystemAxon.tsx    exploded five-plane deployment assembly
     ControlMap.tsx    interactive control-flow map
-    primitives.tsx    Value, chips, Part, PageMast, Reveal, KV, Glyph
-    Shell.tsx         masthead and colophon
+    primitives.tsx    Value, chips, DocControl, StatusOfDocument, SectionHead,
+                      Figure, TableHead, PageMast, RevisionFoot, Reveal, KV, Glyph
+    Shell.tsx         letterhead and colophon
   pages/              Home, Capabilities, Assurance, Implementation,
                       Records, Procurement, Contact, NotFound
 ```

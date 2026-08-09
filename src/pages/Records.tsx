@@ -1,7 +1,15 @@
 import { Link } from 'react-router-dom'
-import { PageMast, Part, Value } from '../components/primitives'
-import { recordRegister, specimenRecord } from '../content/site'
+import {
+  PageMast,
+  RevisionFoot,
+  SectionHead,
+  TableHead,
+  Value,
+} from '../components/primitives'
+import { partByPath, recordRegister, specimenRecord } from '../content/site'
 import { routeMeta, useMeta } from '../lib/useMeta'
+
+const PART = partByPath('/records')
 
 const SCHEMA: { field: string; rule: string }[] = [
   { field: 'Engagement ID', rule: 'Assigned at contract signature. Never reused.' },
@@ -20,7 +28,10 @@ const SCHEMA: { field: string; rule: string }[] = [
     rule: 'A figure, its unit, its measurement window, and the report it came from. Published only when that report can be produced on request.',
   },
   { field: 'Baseline', rule: 'What the figure is measured against, and how the baseline was taken.' },
-  { field: 'Deployment period', rule: 'Actual start and end dates. No “recently” or “over several months”.' },
+  {
+    field: 'Deployment period',
+    rule: 'Actual start and end dates. No “recently” or “over several months”.',
+  },
   {
     field: 'Reference status',
     rule: 'Public, under NDA, or unavailable — stated explicitly, with the reason when unavailable.',
@@ -33,9 +44,9 @@ export default function Records() {
   return (
     <>
       <PageMast
-        eyebrow="Records"
+        part={PART}
         title="An empty register, and the reason it is empty"
-        lede="Anonymous testimonials and unnamed logos are the cheapest things on any vendor website, which is exactly why they carry no weight with a reviewer who has seen a hundred of them. This page publishes the format instead, so you can see what evidence would look like when it exists."
+        lede="Anonymous testimonials and unnamed logos are the cheapest things on any supplier website, which is exactly why they carry no weight with a reviewer who has seen a hundred of them. This part publishes the format instead, so you can see what evidence will look like when it exists."
         rail={[
           { label: 'Published records', value: String(recordRegister.publishedCount) },
           { label: 'Anonymous case studies', value: 'None, by policy' },
@@ -44,20 +55,20 @@ export default function Records() {
         ]}
       />
 
-      <section className="section surface-document">
+      <section className="sheet section" id="register">
         <div className="wrap">
-          <Part index="Register" aside="0 rows" title="Engagement register" />
+          <SectionHead no="5.1" aside="0 rows" title="Engagement register" />
 
-          <div className="empty-reg" style={{ maxWidth: '72ch' }}>
+          <div className="empty-reg" style={{ maxWidth: '74ch' }}>
             <span className="stamp">No published records</span>
             <p className="prose">{recordRegister.statement}</p>
           </div>
 
-          <div style={{ marginTop: 'clamp(2.5rem,5vw,4rem)' }}>
-            <p className="eyebrow" style={{ marginBottom: '1rem' }}>
+          <div style={{ marginTop: 'clamp(2rem,4vw,3rem)' }}>
+            <p className="eyebrow" style={{ marginBottom: '0.85rem' }}>
               Publication policy
             </p>
-            <ul className="tick" style={{ maxWidth: '72ch' }}>
+            <ul className="tick" style={{ maxWidth: '74ch' }}>
               {recordRegister.policy.map((p) => (
                 <li key={p}>{p}</li>
               ))}
@@ -66,34 +77,36 @@ export default function Records() {
         </div>
       </section>
 
-      <section className="section surface-document-pale">
+      <section className="sheet sheet--raised section" id="format">
         <div className="wrap">
-          <Part
-            index="Format"
-            aside="specimen"
+          <SectionHead
+            no="5.2"
+            aside="table 5.1 · specimen"
             title="What a record will contain"
             lede="Below: the field-by-field rule, then a worked specimen showing the shape. The specimen is not an engagement and is stamped as such wherever it appears."
           />
 
           <div className="grid-2" style={{ alignItems: 'start' }}>
-            <div className="scroll-x scroll-x--fluid">
-              <table className="reg">
-                <caption>Record schema</caption>
-                <thead>
-                  <tr>
-                    <th scope="col">Field</th>
-                    <th scope="col">Rule</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {SCHEMA.map((s) => (
-                    <tr key={s.field}>
-                      <td style={{ fontWeight: 500, minWidth: '10rem' }}>{s.field}</td>
-                      <td style={{ color: 'var(--ink-600)' }}>{s.rule}</td>
+            <div>
+              <TableHead no="5.1" title="Record schema" note={`${SCHEMA.length} fields`} />
+              <div className="scroll-x scroll-x--fluid">
+                <table className="reg">
+                  <thead>
+                    <tr>
+                      <th scope="col">Field</th>
+                      <th scope="col">Rule</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {SCHEMA.map((s) => (
+                      <tr key={s.field}>
+                        <td style={{ fontWeight: 500, minWidth: '9rem' }}>{s.field}</td>
+                        <td style={{ color: 'var(--ink-600)' }}>{s.rule}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <div className="card">
@@ -104,7 +117,7 @@ export default function Records() {
                   alignItems: 'baseline',
                   gap: '1rem',
                   flexWrap: 'wrap',
-                  marginBottom: '1rem',
+                  marginBottom: '0.9rem',
                 }}
               >
                 <span className="uid">{specimenRecord.id}</span>
@@ -130,40 +143,38 @@ export default function Records() {
                   </div>
                 ))}
               </dl>
-              <p className="uid" style={{ marginTop: '1.25rem', lineHeight: 1.6 }}>
-                The wording in “measured result” and “deployment period” describes
-                what will be stated. It is not a result and not a date range.
+              <p className="uid" style={{ marginTop: '1.1rem', lineHeight: 1.55 }}>
+                The wording under “measured result” and “deployment period”
+                describes what will be stated. It is not a result and not a date
+                range.
               </p>
             </div>
           </div>
-
-          <div className="btn-row" style={{ marginTop: '2rem' }}>
-            <Link to="/contact" className="btn btn--solid-ink">
-              Discuss a first deployment
-            </Link>
-            <Link to="/assurance" className="btn btn--ink">
-              Assurance register
-            </Link>
-          </div>
         </div>
       </section>
 
-      <section className="section--tight surface-command">
+      <section className="sheet section" id="first">
         <div className="wrap">
-          <div className="card" style={{ maxWidth: '68ch' }}>
-            <h2 className="display display--md" style={{ marginBottom: '0.85rem' }}>
-              If you would be the first
-            </h2>
-            <p className="lede">
-              Then that is the negotiation. A first deployment gets direct access
-              to the people building it, a scope small enough to prove or
-              disprove within a term, and pricing that reflects the risk you are
-              taking on an unproven vendor. What it does not get is a claim that
-              you are not the first.
-            </p>
+          <SectionHead no="5.3" aside="stated plainly" title="If you would be the first" />
+          <p className="lede" style={{ maxWidth: '68ch' }}>
+            Then that is the negotiation. A first deployment gets direct access to
+            the people building it, a scope small enough to prove or disprove
+            within a term, and pricing that reflects the risk you are taking on an
+            unproven supplier. What it does not get is a claim that you are not the
+            first.
+          </p>
+          <div className="btn-row" style={{ marginTop: '1.75rem' }}>
+            <Link to="/contact" className="btn btn--primary">
+              § 7 — Discuss a first deployment
+            </Link>
+            <Link to="/assurance" className="btn">
+              § 3 — Assurance register
+            </Link>
           </div>
         </div>
       </section>
+
+      <RevisionFoot part={PART} />
     </>
   )
 }

@@ -1,7 +1,12 @@
 import { useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { KV, PageMast, Part } from '../components/primitives'
-import { org, procurementDocs } from '../content/site'
+import {
+  KV,
+  PageMast,
+  RevisionFoot,
+  SectionHead,
+} from '../components/primitives'
+import { org, partByPath, procurementDocs } from '../content/site'
 import { routeMeta, useMeta } from '../lib/useMeta'
 
 /**
@@ -24,6 +29,8 @@ const ENQUIRY_TYPES = [
   'Document request',
   'Something else',
 ] as const
+
+const PART = partByPath('/contact')
 
 export default function Contact() {
   useMeta(routeMeta('/contact'))
@@ -99,17 +106,23 @@ export default function Contact() {
   return (
     <>
       <PageMast
-        eyebrow="Contact"
+        part={PART}
         title="Tell us the operation, not the requirement list"
         lede="The useful first message names the institution, the two or three request types that are currently ungoverned, and who has to sign off. That is enough to write a brief against — or to tell you we are not the right fit, which is a faster answer than a discovery call."
+        rail={[
+          { label: 'Response time', value: 'Two working days' },
+          { label: 'Replies from', value: 'A person, not a queue' },
+          { label: 'Hours', value: org.hours },
+          { label: 'Location', value: org.addressLines.join(', ') },
+        ]}
       />
 
-      <section className="section surface-document">
+      <section className="sheet section" id="enquiry">
         <div className="wrap">
           <div className="grid-2" style={{ alignItems: 'start' }}>
             {/* ------------------------------------------------------ form */}
             <div>
-              <Part index="Enquiry" title="Send a message" as="h2" />
+              <SectionHead no="7.1" aside="composed locally" title="Send a message" as="h2" />
 
               {requestedDocTitle ? (
                 <div className="notice notice--ok" style={{ marginBottom: '1.5rem' }}>
@@ -304,7 +317,7 @@ export default function Contact() {
 
             {/* --------------------------------------------------- details */}
             <div>
-              <Part index="Details" title="Contact of record" as="h2" />
+              <SectionHead no="7.2" aside="published details" title="Contact of record" as="h2" />
 
               <div className="card">
                 <KV
@@ -355,6 +368,7 @@ export default function Contact() {
           </div>
         </div>
       </section>
+      <RevisionFoot part={PART} />
     </>
   )
 }

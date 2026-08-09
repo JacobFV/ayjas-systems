@@ -1,12 +1,22 @@
 import { Link } from 'react-router-dom'
-import { AssuranceChip, PageMast, Part, Value } from '../components/primitives'
+import {
+  AssuranceChip,
+  PageMast,
+  RevisionFoot,
+  SectionHead,
+  TableHead,
+  Value,
+} from '../components/primitives'
 import {
   assurance,
   org,
+  partByPath,
   subprocessors,
   type AssuranceState,
 } from '../content/site'
 import { routeMeta, useMeta } from '../lib/useMeta'
+
+const PART = partByPath('/assurance')
 
 const LEGEND: { state: AssuranceState; meaning: string }[] = [
   { state: 'verified', meaning: 'Confirmed by a party other than Ayjas Systems.' },
@@ -29,53 +39,55 @@ export default function Assurance() {
   return (
     <>
       <PageMast
-        eyebrow="Assurance"
+        part={PART}
         title="What is held, what is not, and who says so"
-        lede="A procurement reviewer’s job is to find the gap between a claim and its evidence. This page hands over the gaps directly, so the review is about whether the position is acceptable rather than whether it is honest."
+        lede="A procurement reviewer’s job is to find the gap between a claim and its evidence. This part hands over the gaps directly, so the review is about whether the position is acceptable rather than whether it is honest."
         rail={[
           { label: 'Control areas', value: String(assurance.length) },
           { label: 'Independently verified', value: `${verified} — none yet` },
-          { label: 'Areas with nothing held', value: `${none}, stated below` },
+          { label: 'Areas with nothing held', value: `${none}, recorded in § 3.2` },
           { label: 'Register owner', value: <Value v={org.contractingEmail} /> },
         ]}
       />
 
-      <section className="section--tight surface-command">
+      <section className="sheet section" id="definitions">
         <div className="wrap">
-          <p className="eyebrow" style={{ marginBottom: '1rem' }}>
-            State definitions
-          </p>
+          <SectionHead
+            no="3.1"
+            aside="six states"
+            title="State definitions"
+            lede="Only verified and available carry the doubled rule in this document. A state cannot be made to look stronger than it is by setting it differently."
+          />
           <div className="cells cells--3">
             {LEGEND.map((l) => (
               <div className="cell" key={l.state}>
                 <AssuranceChip state={l.state} />
                 <p
                   className="dim"
-                  style={{ marginTop: '0.7rem', fontSize: 'var(--step--1)', lineHeight: 1.55 }}
+                  style={{ marginTop: '0.65rem', fontSize: 'var(--step--1)', lineHeight: 1.5 }}
                 >
                   {l.meaning}
                 </p>
               </div>
             ))}
           </div>
-          <p className="uid" style={{ marginTop: '1.25rem' }}>
-            Only <em>verified</em> and <em>available</em> carry a halo in this design
-            system. A state cannot be made to look stronger than it is by styling
-            it differently.
-          </p>
         </div>
       </section>
 
-      <section className="section surface-document">
+      <section className="sheet sheet--raised section" id="register">
         <div className="wrap">
-          <Part index="Register" aside={`${assurance.length} rows`} title="Control areas" />
+          <SectionHead no="3.2" aside="table 3.1" title="Assurance register" />
 
+          <TableHead
+            no="3.1"
+            title="Assurance register"
+            note={`${assurance.length} rows · complete`}
+          />
           <div className="scroll-x">
             <table className="reg">
-              <caption>Assurance register — complete</caption>
               <thead>
                 <tr>
-                  <th scope="col">ID</th>
+                  <th scope="col">Ref</th>
                   <th scope="col">Control area</th>
                   <th scope="col">Implemented behaviour &amp; qualifier</th>
                   <th scope="col">State</th>
@@ -92,9 +104,9 @@ export default function Assurance() {
                       <span
                         style={{
                           display: 'block',
-                          marginTop: '0.4rem',
+                          marginTop: '0.35rem',
                           paddingLeft: '0.6rem',
-                          borderLeft: '2px solid var(--rule)',
+                          borderLeft: '2px solid var(--rule-mid)',
                           color: 'var(--ink-500)',
                           fontSize: 'var(--step--2)',
                           lineHeight: 1.5,
@@ -129,18 +141,18 @@ export default function Assurance() {
         </div>
       </section>
 
-      <section className="section surface-document-pale" id="subprocessors">
+      <section className="sheet section" id="subprocessors">
         <div className="wrap">
-          <Part
-            index="Data handling"
-            aside="subprocessors"
-            title="Who else touches the data"
-            lede="A deployment runs on infrastructure Ayjas Systems does not own. The list below is part of the data-processing terms and is versioned with them; a change to it is a notifiable change under contract."
+          <SectionHead
+            no="3.3"
+            aside="table 3.2"
+            title="Data handling and subprocessors"
+            lede="A deployment runs on infrastructure Ayjas Systems does not own. The register below forms part of the data-processing terms and is versioned with them; a change to it is a notifiable change under contract."
           />
 
-          <div className="scroll-x">
+          <TableHead no="3.2" title="Subprocessor register" note="Completed per deployment" />
+          <div className="scroll-x scroll-x--fluid">
             <table className="reg">
-              <caption>Subprocessor register</caption>
               <thead>
                 <tr>
                   <th scope="col">Purpose</th>
@@ -164,28 +176,34 @@ export default function Assurance() {
             </table>
           </div>
 
-          <div className="correction" style={{ marginTop: '2rem', maxWidth: '76ch' }}>
-            <p className="correction__k">Why these rows are empty</p>
+          <div className="correction" style={{ marginTop: '1.75rem', maxWidth: '80ch' }}>
+            <p className="correction__k">Note on the unfilled rows above</p>
             <p style={{ fontSize: 'var(--step--1)', lineHeight: 1.6, color: 'var(--ink-800)' }}>
               Providers and regions are fixed at provisioning and recorded in the
               deployment record for a specific contract. Publishing a
               general-purpose list before the deployment exists would be a guess,
-              and a subprocessor list that turns out to be wrong is worse than one
-              that is openly not yet filled. The completed list is supplied with
-              the data-processing terms.
+              and a subprocessor register that turns out to be wrong is worse than
+              one that is openly unfilled. The completed register is supplied with
+              the data-processing terms —{' '}
+              <Link className="xref" to="/procurement">
+                § 6.1
+              </Link>
+              , AIS–DOC–03.
             </p>
           </div>
 
-          <div className="btn-row" style={{ marginTop: '1.75rem' }}>
-            <Link to="/procurement" className="btn btn--solid-ink">
-              Document drawer
+          <div className="btn-row" style={{ marginTop: '1.5rem' }}>
+            <Link to="/procurement" className="btn btn--primary">
+              § 6 — Document drawer
             </Link>
-            <Link to="/contact" className="btn btn--ink">
-              Ask about a specific control
+            <Link to="/contact" className="btn">
+              § 7 — Ask about a specific control
             </Link>
           </div>
         </div>
       </section>
+
+      <RevisionFoot part={PART} />
     </>
   )
 }

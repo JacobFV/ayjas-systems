@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { nav, org, PENDING } from '../content/site'
+import { doc, org, parts, PENDING } from '../content/site'
 import { Glyph } from './primitives'
 
+/**
+ * Letterhead, not an app bar: wordmark, the controlled-document line it belongs
+ * to, and the contents of that document as a running strip. There is no filled
+ * accent CTA anywhere in it — a document header does not sell.
+ */
 export function Masthead() {
   const [open, setOpen] = useState(false)
   const { pathname } = useLocation()
@@ -10,47 +15,49 @@ export function Masthead() {
   useEffect(() => setOpen(false), [pathname])
 
   return (
-    <header className="masthead">
-      <div className="wrap masthead__bar">
+    <header className="letterhead">
+      <div className="wrap letterhead__bar">
         <Link to="/" className="mark" aria-label={`${org.legalName} — home`}>
           <Glyph className="mark__glyph" />
-          <span className="mark__text">AYJAS</span>
+          <span className="mark__text">AYJAS SYSTEMS</span>
         </Link>
 
-        <nav className="masthead__nav" aria-label="Primary">
-          {nav.map((n) => (
-            <NavLink key={n.to} to={n.to} className="navlink">
-              {n.label}
-            </NavLink>
-          ))}
-          <Link to="/contact" className="btn btn--primary masthead__cta">
-            Request procurement brief
-          </Link>
-        </nav>
+        <p className="letterhead__doc">
+          {doc.title} · {doc.id} · rev {doc.revision} · {doc.classification}
+        </p>
 
         <button
           type="button"
-          className="masthead__burger"
+          className="burger"
           aria-expanded={open}
-          aria-controls="mobile-nav"
+          aria-controls="contents-drawer"
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? 'Close' : 'Menu'}
+          {open ? 'Close' : 'Contents'}
         </button>
       </div>
 
-      {/* Always in the DOM so `aria-controls` always resolves; `hidden` keeps it
-          out of the accessibility tree and the tab order when closed. */}
-      <div className="drawer" id="mobile-nav" hidden={!open}>
-        <nav className="wrap drawer__list" aria-label="Primary, mobile">
-          {nav.map((n) => (
-            <NavLink key={n.to} to={n.to} className="drawer__item">
-              {n.label}
+      <nav className="wrap contents-strip" aria-label="Contents">
+        <div className="contents-strip__list">
+          {parts.map((p) => (
+            <NavLink key={p.to} to={p.to} className="contents-strip__item" end={p.to === '/'}>
+              <span className="contents-strip__n">§&nbsp;{p.n}</span>
+              <span>{p.short}</span>
             </NavLink>
           ))}
-          <NavLink to="/contact" className="drawer__item">
-            Contact &amp; procurement brief
-          </NavLink>
+        </div>
+      </nav>
+
+      {/* Always in the DOM so `aria-controls` resolves; `hidden` keeps it out of
+          the accessibility tree and tab order when closed. */}
+      <div className="drawer" id="contents-drawer" hidden={!open}>
+        <nav className="wrap drawer__list" aria-label="Contents, narrow viewport">
+          {parts.map((p) => (
+            <NavLink key={p.to} to={p.to} className="drawer__item" end={p.to === '/'}>
+              <span className="drawer__n">§&nbsp;{p.n}</span>
+              <span>{p.title}</span>
+            </NavLink>
+          ))}
         </nav>
       </div>
     </header>
@@ -59,46 +66,52 @@ export function Masthead() {
 
 export function Colophon() {
   return (
-    <footer className="colophon">
+    <footer className="colophon sheet panel-ink">
       <div className="wrap">
         <div className="colophon__grid">
           <div>
-            <Link to="/" className="mark" style={{ marginBottom: '1rem' }}>
-              <Glyph className="mark__glyph" />
-              <span className="mark__text">{org.wordmark}</span>
-            </Link>
-            <p className="prose" style={{ fontSize: 'var(--step--1)', maxWidth: '34ch' }}>
-              One system, configured per institution: service requests,
-              approvals, vendor coordination, and the record of both.
+            <p className="eyebrow" style={{ marginBottom: '0.85rem' }}>
+              Issued by
             </p>
-            <p className="mono" style={{ marginTop: '1.25rem', color: 'var(--cmd-text-dim)' }}>
+            <p
+              className="display display--sm"
+              style={{ marginBottom: '0.75rem', maxWidth: '18ch' }}
+            >
+              {org.legalName}
+            </p>
+            <p className="prose" style={{ fontSize: 'var(--step--1)', maxWidth: '36ch' }}>
+              One system, configured per institution: service requests, approvals,
+              vendor coordination, and the record of all three.
+            </p>
+            <p className="mono" style={{ marginTop: '1.1rem' }}>
               <a className="tlink" href={`mailto:${org.email}`}>
                 {org.email}
               </a>
             </p>
-            <p className="uid" style={{ marginTop: '0.5rem' }}>
+            <p className="uid" style={{ marginTop: '0.45rem' }}>
               {org.addressLines.join(' · ')} · {org.hours}
             </p>
           </div>
 
           <div>
-            <h2>The system</h2>
+            <h2>Contents</h2>
             <div className="colophon__links">
-              <Link to="/capabilities">Capabilities</Link>
-              <Link to="/capabilities#reports">Standard reports</Link>
-              <Link to="/implementation">Implementation planes</Link>
-              <Link to="/records">Engagement register</Link>
+              {parts.map((p) => (
+                <Link key={p.to} to={p.to}>
+                  § {p.n} — {p.title}
+                </Link>
+              ))}
             </div>
           </div>
 
           <div>
-            <h2>Procurement</h2>
+            <h2>Cited sections</h2>
             <div className="colophon__links">
-              <Link to="/assurance">Assurance register</Link>
-              <Link to="/assurance#subprocessors">Subprocessors</Link>
-              <Link to="/procurement">Document drawer</Link>
-              <Link to="/procurement#identifiers">Vendor identifiers</Link>
-              <Link to="/contact">Contracting contact</Link>
+              <Link to="/capabilities#reports">§ 2.3 — Standard reports</Link>
+              <Link to="/assurance#definitions">§ 3.1 — State definitions</Link>
+              <Link to="/assurance#subprocessors">§ 3.3 — Subprocessors</Link>
+              <Link to="/records#format">§ 5.2 — Record format</Link>
+              <Link to="/procurement#identifiers">§ 6.2 — Entity identifiers</Link>
             </div>
           </div>
         </div>
@@ -109,9 +122,9 @@ export function Colophon() {
             {org.registeredName !== PENDING ? ` · ${org.registeredName}` : ''}
           </span>
           <span>
-            Every claim on this site carries a state. Unfilled fields are shown as
-            unfilled.
+            {doc.id} · rev {doc.revision} · issued {doc.issued}
           </span>
+          <span>Unfilled fields are shown as unfilled.</span>
         </div>
       </div>
     </footer>

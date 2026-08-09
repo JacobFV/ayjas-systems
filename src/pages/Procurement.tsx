@@ -1,7 +1,17 @@
 import { Link } from 'react-router-dom'
-import { DocChip, KV, PageMast, Part, Value } from '../components/primitives'
-import { org, procurementDocs, PENDING } from '../content/site'
+import {
+  DocChip,
+  KV,
+  PageMast,
+  RevisionFoot,
+  SectionHead,
+  TableHead,
+  Value,
+} from '../components/primitives'
+import { org, partByPath, procurementDocs, PENDING } from '../content/site'
 import { routeMeta, useMeta } from '../lib/useMeta'
+
+const PART = partByPath('/procurement')
 
 export default function Procurement() {
   useMeta(routeMeta('/procurement'))
@@ -11,7 +21,7 @@ export default function Procurement() {
   return (
     <>
       <PageMast
-        eyebrow="Procurement"
+        part={PART}
         title="The drawer, with states you can act on"
         lede="Six documents, each with an owner, a revision, and an availability state. Nothing here links to a placeholder: a document that is not written says drafting, and a document that does not exist says not produced."
         rail={[
@@ -22,10 +32,15 @@ export default function Procurement() {
         ]}
       />
 
-      <section className="section surface-document">
+      <section className="sheet section" id="drawer">
         <div className="wrap">
-          <Part index="Document drawer" aside="six items" title="Procurement documents" />
+          <SectionHead no="6.1" aside="table 6.1" title="Document drawer" />
 
+          <TableHead
+            no="6.1"
+            title="Procurement documents"
+            note={`${procurementDocs.length} items`}
+          />
           <div>
             {procurementDocs.map((d) => (
               <div className="docrow" key={d.id}>
@@ -42,17 +57,17 @@ export default function Procurement() {
                     OWNER <Value v={d.owner} label="Owner" compact />
                   </span>
                 </div>
-                <div style={{ display: 'grid', gap: '0.6rem', justifyItems: 'start' }}>
+                <div style={{ display: 'grid', gap: '0.55rem', justifyItems: 'start' }}>
                   <DocChip state={d.state} />
                   {d.state === 'available' && d.href ? (
-                    <a className="btn btn--ink" href={d.href}>
+                    <a className="btn btn--sm" href={d.href}>
                       Download
                     </a>
                   ) : d.state === 'unavailable' ? (
                     <span className="uid">Not offered</span>
                   ) : (
                     <Link
-                      className="btn btn--ink"
+                      className="btn btn--sm"
                       to={`/contact?doc=${encodeURIComponent(d.id)}`}
                     >
                       Request
@@ -63,38 +78,39 @@ export default function Procurement() {
             ))}
           </div>
 
-          <div className="correction" style={{ marginTop: '2rem', maxWidth: '76ch' }}>
-            <p className="correction__k">Why nothing downloads yet</p>
+          <div className="correction" style={{ marginTop: '1.75rem', maxWidth: '80ch' }}>
+            <p className="correction__k">Note on availability</p>
             <p style={{ fontSize: 'var(--step--1)', lineHeight: 1.6, color: 'var(--ink-800)' }}>
-              An earlier version of this site had procurement buttons that linked
-              nowhere. Rather than replace dead links with generic PDFs, each
+              Earlier published material had procurement buttons that linked
+              nowhere. Rather than replace dead links with generic documents, each
               document is written against a real deployment as it comes into
               existence, and its state here changes when it does. Request one and
-              you get the current revision or a straight answer that it is not
+              you get the current revision, or a straight answer that it is not
               written yet.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="section surface-document-pale" id="identifiers">
+      <section className="sheet sheet--raised section" id="identifiers">
         <div className="wrap">
-          <Part
-            index="Vendor identifiers"
-            aside="for contracting"
-            title="Who you would be contracting with"
-            lede="A supplier record cannot be opened without these. They are supplied in full with the vendor identifiers document; the fields are listed here so you know exactly what is coming."
+          <SectionHead
+            no="6.2"
+            aside="table 6.2"
+            title="Entity identifiers"
+            lede="A supplier record cannot be opened without these. They are supplied in full with AIS–DOC–05; the fields are listed here so you know exactly what is coming."
           />
 
           <div className="grid-2" style={{ alignItems: 'start' }}>
             <div className="card">
-              <p className="eyebrow" style={{ marginBottom: '1rem' }}>
-                Entity
-              </p>
+              <TableHead no="6.2" title="Contracting entity" />
               <KV
                 rows={[
                   { k: 'Trading name', v: org.legalName },
-                  { k: 'Registered name', v: <Value v={org.registeredName} label="Registered name" /> },
+                  {
+                    k: 'Registered name',
+                    v: <Value v={org.registeredName} label="Registered name" />,
+                  },
                   { k: 'CAC RC number', v: <Value v={org.rcNumber} label="RC number" /> },
                   { k: 'Tax identification', v: <Value v={org.tin} label="TIN" /> },
                   { k: 'Incorporated', v: <Value v={org.founded} label="Incorporated" /> },
@@ -105,9 +121,7 @@ export default function Procurement() {
             </div>
 
             <div className="card">
-              <p className="eyebrow" style={{ marginBottom: '1rem' }}>
-                Contact of record
-              </p>
+              <TableHead no="6.3" title="Contact of record" />
               <KV
                 rows={[
                   {
@@ -119,13 +133,13 @@ export default function Procurement() {
                           <span
                             style={{
                               display: 'block',
-                              marginTop: '0.4rem',
+                              marginTop: '0.35rem',
                               fontSize: 'var(--step--2)',
                               color: 'var(--ink-400)',
                             }}
                           >
-                            Use the general address below until a domain mailbox is in
-                            place.
+                            Use the general address below until a domain mailbox is
+                            in place.
                           </span>
                         </>
                       ) : (
@@ -147,24 +161,26 @@ export default function Procurement() {
                   { k: 'Hours', v: org.hours },
                 ]}
               />
-              <div className="notice" style={{ marginTop: '1.5rem' }}>
+              <div className="notice" style={{ marginTop: '1.25rem' }}>
                 The address above is a general contact address, not a registered
-                office. The registered office appears on the vendor identifiers
-                document once the entity record is confirmed.
+                office. The registered office appears on AIS–DOC–05 once the entity
+                record is confirmed.
               </div>
             </div>
           </div>
 
-          <div className="btn-row" style={{ marginTop: '2rem' }}>
-            <Link to="/contact" className="btn btn--solid-ink">
-              Request documents
+          <div className="btn-row" style={{ marginTop: '1.75rem' }}>
+            <Link to="/contact" className="btn btn--primary">
+              § 7 — Request documents
             </Link>
-            <a className="btn btn--ink" href={`mailto:${org.email}`}>
+            <a className="btn" href={`mailto:${org.email}`}>
               Email directly
             </a>
           </div>
         </div>
       </section>
+
+      <RevisionFoot part={PART} />
     </>
   )
 }

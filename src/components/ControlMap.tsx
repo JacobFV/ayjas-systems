@@ -3,8 +3,8 @@
  * illuminates the corresponding node and every edge incident to it.
  *
  * Two edge kinds carry different meaning and therefore different colour:
- *   flow      the path a request travels — blue-gray, vermilion when active
- *   boundary  a permission or domain interface — indigo, dashed
+ *   flow      the path a request travels — steel, stamp red when active
+ *   boundary  a permission or domain interface — muted indigo, dashed
  */
 
 type NodeDef = {
@@ -91,7 +91,7 @@ export default function ControlMap({ active }: { active: string | null }) {
           markerHeight="6"
           orient="auto"
         >
-          <path d="M0 0 L8 4 L0 8 z" fill="#6c8992" />
+          <path d="M0 0 L8 4 L0 8 z" fill="#6a7480" />
         </marker>
         <marker
           id="cm-arrow-hot"
@@ -102,7 +102,7 @@ export default function ControlMap({ active }: { active: string | null }) {
           markerHeight="6"
           orient="auto"
         >
-          <path d="M0 0 L8 4 L0 8 z" fill="#d64221" />
+          <path d="M0 0 L8 4 L0 8 z" fill="#c0492a" />
         </marker>
       </defs>
 
@@ -114,7 +114,7 @@ export default function ControlMap({ active }: { active: string | null }) {
             key={i}
             d={edgePath(e)}
             fill="none"
-            stroke={hot ? '#d64221' : e.kind === 'boundary' ? '#6274e4' : '#6c8992'}
+            stroke={hot ? '#c0492a' : e.kind === 'boundary' ? '#5e75a8' : '#6a7480'}
             strokeOpacity={hot ? 1 : e.kind === 'boundary' ? 0.5 : 0.65}
             strokeWidth={hot ? 2 : 1}
             strokeDasharray={e.kind === 'boundary' ? '3 4' : undefined}
@@ -135,14 +135,14 @@ export default function ControlMap({ active }: { active: string | null }) {
               y={n.y}
               width={n.w ?? W}
               height={H}
-              rx="4"
-              fill={hot ? '#1a1210' : '#0a221f'}
-              stroke={hot ? '#d64221' : '#6c8992'}
+              rx="2"
+              fill={hot ? '#241a17' : '#1a1f26'}
+              stroke={hot ? '#c0492a' : '#6a7480'}
               strokeOpacity={hot ? 1 : 0.65}
               strokeWidth={hot ? 1.6 : 1}
               style={{
                 transition: 'stroke 200ms, fill 200ms, stroke-width 200ms',
-                filter: hot ? 'drop-shadow(0 0 10px rgba(214,66,33,0.45))' : 'none',
+                filter: 'none',
               }}
             />
             <text
@@ -151,7 +151,7 @@ export default function ControlMap({ active }: { active: string | null }) {
               textAnchor="middle"
               fontSize="10"
               letterSpacing="0.1em"
-              fill={hot ? '#f2c8bd' : '#9fb3ae'}
+              fill={hot ? '#efd3c9' : '#a8adb4'}
               style={{ transition: 'fill 200ms' }}
             >
               {n.label}
@@ -161,8 +161,8 @@ export default function ControlMap({ active }: { active: string | null }) {
       })}
 
       {/* legend */}
-      <g fontSize="8.5" fill="#6d8480" letterSpacing="0.08em">
-        <line x1="44" y1="316" x2="72" y2="316" stroke="#6c8992" strokeWidth="1" />
+      <g fontSize="8.5" fill="#858c94" letterSpacing="0.08em">
+        <line x1="44" y1="316" x2="72" y2="316" stroke="#6a7480" strokeWidth="1" />
         <text x="80" y="319">
           REQUEST FLOW
         </text>
@@ -171,7 +171,7 @@ export default function ControlMap({ active }: { active: string | null }) {
           y1="316"
           x2="224"
           y2="316"
-          stroke="#6274e4"
+          stroke="#5e75a8"
           strokeWidth="1"
           strokeDasharray="3 4"
         />

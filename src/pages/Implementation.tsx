@@ -1,8 +1,17 @@
 import { Link } from 'react-router-dom'
-import { PageMast, Part, Reveal, Value } from '../components/primitives'
-import { planes } from '../content/site'
+import {
+  Figure,
+  PageMast,
+  RevisionFoot,
+  Reveal,
+  SectionHead,
+  Value,
+} from '../components/primitives'
+import { partByPath, planes } from '../content/site'
 import { routeMeta, useMeta } from '../lib/useMeta'
 import { iso, path, pts, plate } from '../lib/iso'
+
+const PART = partByPath('/implementation')
 
 export default function Implementation() {
   useMeta(routeMeta('/implementation'))
@@ -10,33 +19,46 @@ export default function Implementation() {
   return (
     <>
       <PageMast
-        eyebrow="Implementation"
+        part={PART}
         title="Five planes, each with a condition to clear"
         lede="A phase name on its own says nothing. Each plane below declares what goes in, what comes out as an artefact you can hold, who is responsible on each side, and the acceptance condition that has to be met before the next plane begins."
         rail={[
           { label: 'Planes', value: String(planes.length) },
-          { label: 'Artefacts produced', value: String(planes.reduce((n, p) => n + p.outputs.length, 0)) },
+          {
+            label: 'Artefacts produced',
+            value: String(planes.reduce((n, p) => n + p.outputs.length, 0)),
+          },
           { label: 'Total duration', value: <Value v={planes[0].duration} /> },
           { label: 'Exit condition', value: 'You can export everything yourself' },
         ]}
-      >
-        <div style={{ marginTop: 'clamp(2rem,4vw,3rem)', maxWidth: '30rem' }}>
-          <PlaneStack />
-        </div>
-      </PageMast>
+      />
 
-      <section className="section surface-document">
+      <section className="sheet section" id="sequence">
         <div className="wrap">
-          <Part
-            index="Deployment planes"
-            aside="inputs · outputs · owners · acceptance"
+          <SectionHead no="4.1" aside="figure 4.1" title="Deployment sequence" />
+          <div style={{ maxWidth: '34rem' }}>
+            <Figure
+              no="4.1"
+              caption="The five deployment planes, plane 01 at the base. The stamp-red thread is the sequence itself: work descends one plane at a time, and no plane starts before the one above it has cleared its acceptance condition."
+            >
+              <PlaneStack />
+            </Figure>
+          </div>
+        </div>
+      </section>
+
+      <section className="sheet sheet--raised section" id="planes">
+        <div className="wrap">
+          <SectionHead
+            no="4.2"
+            aside="inputs · artefacts · owners · acceptance"
             title="The assembly, plane by plane"
           />
 
           {planes.map((p) => (
             <Reveal as="section" className="plane" key={p.n}>
               <div className="plane__head">
-                <span className="plane__n">{p.n}</span>
+                <span className="plane__n">Plane {p.n}</span>
                 <h2 className="display display--sm">{p.name}</h2>
                 <p className="uid">
                   Duration <Value v={p.duration} label="Duration" />
@@ -62,16 +84,28 @@ export default function Implementation() {
                   </div>
                 </div>
 
-                <div className="plane__cols" style={{ marginTop: '1.5rem' }}>
+                <div className="plane__cols" style={{ marginTop: '1.35rem' }}>
                   <div className="plane__col">
                     <h4>Ayjas Systems is responsible for</h4>
-                    <p style={{ fontSize: 'var(--step--1)', color: 'var(--ink-600)', lineHeight: 1.55 }}>
+                    <p
+                      style={{
+                        fontSize: 'var(--step--1)',
+                        color: 'var(--ink-600)',
+                        lineHeight: 1.5,
+                      }}
+                    >
                       {p.responsible.ayjas}
                     </p>
                   </div>
                   <div className="plane__col">
                     <h4>The institution is responsible for</h4>
-                    <p style={{ fontSize: 'var(--step--1)', color: 'var(--ink-600)', lineHeight: 1.55 }}>
+                    <p
+                      style={{
+                        fontSize: 'var(--step--1)',
+                        color: 'var(--ink-600)',
+                        lineHeight: 1.5,
+                      }}
+                    >
                       {p.responsible.institution}
                     </p>
                   </div>
@@ -87,13 +121,13 @@ export default function Implementation() {
         </div>
       </section>
 
-      <section className="section surface-command">
+      <section className="sheet section" id="exit">
         <div className="wrap">
-          <Part
-            index="Exit"
+          <SectionHead
+            no="4.3"
             aside="stated up front"
             title="How a deployment ends"
-            lede="A vendor that cannot describe its own exit path is a risk to the institution. Ours is written into the terms, not discovered later."
+            lede="A supplier that cannot describe its own exit path is a risk to the institution. Ours is written into the terms, not discovered later."
           />
           <div className="cells cells--3">
             {[
@@ -111,33 +145,34 @@ export default function Implementation() {
               ],
             ].map(([h, b]) => (
               <div className="cell" key={h}>
-                <h3 className="display display--sm" style={{ marginBottom: '0.6rem' }}>
+                <h3 className="display display--sm" style={{ marginBottom: '0.5rem' }}>
                   {h}
                 </h3>
-                <p className="dim" style={{ fontSize: 'var(--step--1)', lineHeight: 1.55 }}>
+                <p className="dim" style={{ fontSize: 'var(--step--1)', lineHeight: 1.5 }}>
                   {b}
                 </p>
               </div>
             ))}
           </div>
-          <div className="btn-row" style={{ marginTop: '2rem' }}>
+          <div className="btn-row" style={{ marginTop: '1.75rem' }}>
             <Link to="/contact" className="btn btn--primary">
-              Request an implementation brief
+              § 7 — Request an implementation brief
             </Link>
             <Link to="/procurement" className="btn">
-              Document drawer ↗
+              § 6 — Document drawer
             </Link>
           </div>
         </div>
       </section>
+
+      <RevisionFoot part={PART} />
     </>
   )
 }
 
 /**
- * Five stacked planes, numbered bottom-up, with a vermilion thread running
- * through them: the same visual grammar as the homepage assembly, reduced to a
- * schematic of the deployment sequence itself.
+ * Five stacked planes, numbered bottom-up, with a stamp-red thread running
+ * through them: the same drawing grammar as Figure 1.1, reduced to the sequence.
  */
 function PlaneStack() {
   const S = 150
@@ -147,7 +182,7 @@ function PlaneStack() {
   const order = [...planes].reverse() // top plane painted first
 
   // Descends plane by plane: a lateral move inside each plane, then a drop to
-  // the next. Same grammar as the homepage assembly, reduced to the sequence.
+  // the next.
   const thread: [number, number, number][] = [
     [100, 45, top],
     [100, 45, GAP * 3],
@@ -166,7 +201,7 @@ function PlaneStack() {
       role="img"
       aria-label="Schematic of five stacked deployment planes, numbered one at the bottom through five at the top, with a single thread descending through all five."
     >
-      <g stroke="#1d4642" strokeWidth="1" strokeDasharray="2 5">
+      <g stroke="#333b45" strokeWidth="1" strokeDasharray="2 5">
         {[
           [0, 0],
           [S, 0],
@@ -184,9 +219,9 @@ function PlaneStack() {
         <polygon
           key={p.n}
           points={pts(plate(S, GAP * (planes.length - 1 - i)))}
-          fill="#0b2724"
+          fill="#1e252e"
           fillOpacity="0.92"
-          stroke="#6c8992"
+          stroke="#6a7480"
           strokeOpacity="0.6"
         />
       ))}
@@ -202,14 +237,14 @@ function PlaneStack() {
               y1={right[1]}
               x2={LABEL_X - 8}
               y2={right[1]}
-              stroke="#1d4642"
+              stroke="#333b45"
               strokeDasharray="2 3"
             />
-            <circle cx={right[0]} cy={right[1]} r="1.8" fill="#6c8992" />
-            <text x={LABEL_X} y={right[1] - 1} fontSize="9" fill="#e6ece9">
+            <circle cx={right[0]} cy={right[1]} r="1.8" fill="#6a7480" />
+            <text x={LABEL_X} y={right[1] - 1} fontSize="9" fill="#e7e5df">
               {p.n}
             </text>
-            <text x={LABEL_X} y={right[1] + 11} fontSize="8" fill="#6d8480">
+            <text x={LABEL_X} y={right[1] + 11} fontSize="8" fill="#858c94">
               {p.name.toLowerCase()}
             </text>
           </g>
@@ -219,7 +254,7 @@ function PlaneStack() {
       <path
         d={path(thread.map(([u, v, z]) => iso(u, v, z)))}
         fill="none"
-        stroke="#d64221"
+        stroke="#c0492a"
         strokeWidth="1.8"
         strokeLinejoin="round"
         strokeLinecap="round"

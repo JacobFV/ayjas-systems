@@ -6,11 +6,11 @@ import { iso, pts, path, plate, box, diamond } from '../lib/iso'
  * Five separated planes, bottom to top:
  *   record → vendors → approval → intake/roles → institution
  *
- * Everything is blue-gray linework except one vermilion route, which traces a
- * single service request descending from the location that raised it, through
- * approval and vendor assignment, into the audit record. That route is the only
- * saturated element in the drawing, so the eye reads it as the subject rather
- * than as decoration.
+ * Everything is steel linework except one stamp-red route, which traces a single
+ * service request descending from the location that raised it, through approval
+ * and vendor assignment, into the audit record. That route is the only saturated
+ * element in the drawing, so the eye reads it as the subject rather than as
+ * decoration. Active nodes are marked in archival blue — a fill, never a glow.
  */
 
 const S = 200 // plane side, in projection units
@@ -111,23 +111,23 @@ export default function SystemAxon({ id = 'axon' }: { id?: string }) {
 
       <defs>
         <linearGradient id={`${id}-plate`} x1="0" y1="0" x2="0.4" y2="1">
-          <stop offset="0" stopColor="#0f2e2b" stopOpacity="0.9" />
-          <stop offset="1" stopColor="#05110f" stopOpacity="0.55" />
+          <stop offset="0" stopColor="#1e252e" stopOpacity="0.9" />
+          <stop offset="1" stopColor="#14171b" stopOpacity="0.55" />
         </linearGradient>
         <linearGradient id={`${id}-plate-live`} x1="0" y1="0" x2="0.4" y2="1">
-          <stop offset="0" stopColor="#16403c" stopOpacity="0.95" />
-          <stop offset="1" stopColor="#08201d" stopOpacity="0.6" />
+          <stop offset="0" stopColor="#252d38" stopOpacity="0.95" />
+          <stop offset="1" stopColor="#171b21" stopOpacity="0.6" />
         </linearGradient>
         {/* Boundary tint: where one domain hands off to the next. */}
         <linearGradient id={`${id}-bound`} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#6274e4" stopOpacity="0.55" />
-          <stop offset="0.55" stopColor="#3fc3b6" stopOpacity="0.4" />
-          <stop offset="1" stopColor="#6274e4" stopOpacity="0" />
+          <stop offset="0" stopColor="#5e75a8" stopOpacity="0.55" />
+          <stop offset="0.55" stopColor="#8aa6ce" stopOpacity="0.4" />
+          <stop offset="1" stopColor="#5e75a8" stopOpacity="0" />
         </linearGradient>
       </defs>
 
       {/* Corner struts: make the explosion legible as one assembly. */}
-      <g stroke="#1d4642" strokeWidth="1" strokeDasharray="2 5">
+      <g stroke="#333b45" strokeWidth="1" strokeDasharray="2 5">
         {[
           [0, 0],
           [S, 0],
@@ -151,13 +151,13 @@ export default function SystemAxon({ id = 'axon' }: { id?: string }) {
             <polygon
               points={pts(corners)}
               fill={`url(#${id}-${lv.live ? 'plate-live' : 'plate'})`}
-              stroke="#6c8992"
+              stroke="#6a7480"
               strokeOpacity={lv.live ? 0.85 : 0.55}
               strokeWidth="1"
             />
 
             {/* internal hairline grid on the plane */}
-            <g stroke="#6c8992" strokeOpacity="0.16" strokeWidth="0.75">
+            <g stroke="#6a7480" strokeOpacity="0.16" strokeWidth="0.75">
               {[50, 100, 150].map((t) => (
                 <g key={t}>
                   <line {...seg(iso(t, 0, lv.z), iso(t, S, lv.z))} />
@@ -180,10 +180,10 @@ export default function SystemAxon({ id = 'axon' }: { id?: string }) {
               BUILDINGS.map((b, i) => {
                 const f = box(b[0], b[1], b[2], b[3], b[4], lv.z)
                 return (
-                  <g key={i} stroke="#93a9af" strokeWidth="0.9" strokeOpacity="0.8">
-                    <polygon points={pts(f.right)} fill="#0a221f" />
-                    <polygon points={pts(f.left)} fill="#071917" />
-                    <polygon points={pts(f.top)} fill="#123531" />
+                  <g key={i} stroke="#939ca6" strokeWidth="0.9" strokeOpacity="0.8">
+                    <polygon points={pts(f.right)} fill="#1a1f26" />
+                    <polygon points={pts(f.left)} fill="#141920" />
+                    <polygon points={pts(f.top)} fill="#222a33" />
                   </g>
                 )
               })}
@@ -192,10 +192,9 @@ export default function SystemAxon({ id = 'axon' }: { id?: string }) {
             {nodes.map(([u, v, live], i) => (
               <polygon
                 key={i}
-                className={live ? 'node-live' : undefined}
                 points={pts(diamond(u, v, lv.z, 7))}
-                fill={live ? '#3fc3b6' : '#0a221f'}
-                stroke={live ? '#3fc3b6' : '#6c8992'}
+                fill={live ? '#8aa6ce' : '#1a1f26'}
+                stroke={live ? '#8aa6ce' : '#6a7480'}
                 strokeWidth="1"
                 fillOpacity={live ? 0.9 : 1}
               />
@@ -207,14 +206,14 @@ export default function SystemAxon({ id = 'axon' }: { id?: string }) {
               y1={right[1]}
               x2={right[0] + 34}
               y2={right[1]}
-              stroke="#1d4642"
+              stroke="#333b45"
               strokeWidth="1"
             />
-            <circle cx={right[0]} cy={right[1]} r="2" fill="#6c8992" />
-            <text x={right[0] + 42} y={right[1] - 2} fontSize="9.5" fill="#e6ece9">
+            <circle cx={right[0]} cy={right[1]} r="2" fill="#6a7480" />
+            <text x={right[0] + 42} y={right[1] - 2} fontSize="9.5" fill="#e7e5df">
               {lv.label}
             </text>
-            <text x={right[0] + 42} y={right[1] + 11} fontSize="8.5" fill="#6d8480">
+            <text x={right[0] + 42} y={right[1] + 11} fontSize="8.5" fill="#858c94">
               {lv.sub}
             </text>
           </g>
@@ -225,19 +224,19 @@ export default function SystemAxon({ id = 'axon' }: { id?: string }) {
       <g fill="none" strokeLinecap="round" strokeLinejoin="round">
         <path
           d={path(routePts)}
-          stroke="#d64221"
+          stroke="#c0492a"
           strokeOpacity="0.28"
           strokeWidth="5"
         />
-        <path className="route-draw" d={path(routePts)} stroke="#d64221" strokeWidth="1.8" />
+        <path className="route-draw" d={path(routePts)} stroke="#c0492a" strokeWidth="1.8" />
       </g>
-      <circle cx={routePts[0][0]} cy={routePts[0][1]} r="3.4" fill="#d64221" />
+      <circle cx={routePts[0][0]} cy={routePts[0][1]} r="3.4" fill="#c0492a" />
       <circle
         cx={routePts[routePts.length - 1][0]}
         cy={routePts[routePts.length - 1][1]}
         r="3.4"
         fill="none"
-        stroke="#d64221"
+        stroke="#c0492a"
         strokeWidth="1.6"
       />
 
@@ -245,11 +244,11 @@ export default function SystemAxon({ id = 'axon' }: { id?: string }) {
           route terminates — a leader line back to the origin would have to cross
           the whole assembly. */}
       <g>
-        <line x1="-205" y1="207" x2="-183" y2="207" stroke="#d64221" strokeWidth="1.8" />
-        <text x="-176" y="210" fontSize="9" fill="#d64221">
+        <line x1="-205" y1="207" x2="-183" y2="207" stroke="#c0492a" strokeWidth="1.8" />
+        <text x="-176" y="210" fontSize="9" fill="#c0492a">
           REQ-2418
         </text>
-        <text x="-205" y="226" fontSize="8" fill="#6d8480">
+        <text x="-205" y="226" fontSize="8" fill="#858c94">
           one request, traced end to end
         </text>
       </g>
