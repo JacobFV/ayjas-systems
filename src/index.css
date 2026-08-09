@@ -1125,6 +1125,14 @@ ol {
   line-height: 1.55;
   color: var(--ink-500);
 }
+/* Sticky beside the list: hovering control 06 has to illuminate a diagram you
+   can still see, and the list is taller than the stage. */
+@media (min-width: 980px) {
+  .cmap__stage {
+    position: sticky;
+    top: 5.5rem;
+  }
+}
 .cmap__stage {
   border: 1px solid var(--rule);
   border-radius: var(--r-surface);
