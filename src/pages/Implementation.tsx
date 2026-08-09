@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { PageMast, Part, Reveal, Value } from '../components/primitives'
 import { planes } from '../content/site'
 import { useMeta } from '../lib/useMeta'
-import { iso, pts, plate } from '../lib/iso'
+import { iso, path, pts, plate } from '../lib/iso'
 
 export default function Implementation() {
   useMeta({
@@ -147,10 +147,28 @@ export default function Implementation() {
 function PlaneStack() {
   const S = 150
   const GAP = 46
-  const levels = [...planes].reverse() // draw top plane first
+  const top = GAP * (planes.length - 1)
+
+  // Descends plane by plane: a lateral move inside each plane, then a drop to
+  // the next. Same grammar as the homepage assembly, reduced to the sequence.
+  const thread: [number, number, number][] = [
+    [100, 45, top],
+    [100, 45, GAP * 3],
+    [72, 68, GAP * 3],
+    [72, 68, GAP * 2],
+    [98, 100, GAP * 2],
+    [98, 100, GAP],
+    [58, 92, GAP],
+    [58, 92, 0],
+  ]
 
   return (
-    <svg className="diagram" viewBox="-150 -40 400 300" role="img" aria-label="Schematic of five stacked deployment planes, numbered one at the bottom through five at the top.">
+    <svg
+      className="diagram"
+      viewBox="-150 -205 500 390"
+      role="img"
+      aria-label="Schematic of five stacked deployment planes, numbered one at the bottom through five at the top, with a single thread descending through all five."
+    >
       <g stroke="#1d4642" strokeWidth="1" strokeDasharray="2 5">
         {[
           [0, 0],
@@ -159,44 +177,43 @@ function PlaneStack() {
           [0, S],
         ].map(([u, v], i) => {
           const a = iso(u, v, 0)
-          const b = iso(u, v, GAP * 4)
+          const b = iso(u, v, top)
           return <line key={i} x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} />
         })}
       </g>
 
-      {levels.map((p, i) => {
-        const z = GAP * (levels.length - 1 - i)
-        const corners = plate(S, z)
+      {/* Painted top plane first so the lower planes overlap correctly. */}
+      {[...planes].reverse().map((p, i) => {
+        const z = GAP * (planes.length - 1 - i)
         const right = iso(S, S / 2, z)
         return (
           <g key={p.n}>
             <polygon
-              points={pts(corners)}
+              points={pts(plate(S, z))}
               fill="#0b2724"
-              fillOpacity="0.9"
+              fillOpacity="0.92"
               stroke="#6c8992"
               strokeOpacity="0.6"
             />
-            <line x1={right[0]} y1={right[1]} x2={right[0] + 22} y2={right[1]} stroke="#1d4642" />
-            <text x={right[0] + 28} y={right[1] + 3} fontSize="9" fill="#9fb3ae">
-              {p.n} · {p.name.toUpperCase()}
+            <line x1={right[0]} y1={right[1]} x2={right[0] + 20} y2={right[1]} stroke="#1d4642" />
+            <circle cx={right[0]} cy={right[1]} r="1.8" fill="#6c8992" />
+            <text x={right[0] + 26} y={right[1] - 1} fontSize="9" fill="#e6ece9">
+              {p.n}
+            </text>
+            <text x={right[0] + 26} y={right[1] + 10} fontSize="8" fill="#6d8480">
+              {p.name.toLowerCase()}
             </text>
           </g>
         )
       })}
 
       <path
-        d={planes
-          .map((_, i) => {
-            const z = GAP * i
-            const [x, y] = iso(52 + i * 12, 96 - i * 10, z)
-            return `${i === 0 ? 'M' : 'L'}${x} ${y}`
-          })
-          .join(' ')}
+        d={path(thread.map(([u, v, z]) => iso(u, v, z)))}
         fill="none"
         stroke="#d64221"
         strokeWidth="1.8"
         strokeLinejoin="round"
+        strokeLinecap="round"
         className="route-draw"
       />
     </svg>
