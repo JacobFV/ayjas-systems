@@ -222,7 +222,7 @@ export default function Home() {
             lede={recordRegister.statement}
           />
 
-          <div className="grid-2">
+          <div className="grid-2" style={{ alignItems: 'start' }}>
             <div className="empty-reg">
               <span className="stamp">No published records</span>
               <p className="prose" style={{ fontSize: 'var(--step--1)' }}>

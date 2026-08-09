@@ -241,34 +241,16 @@ export default function SystemAxon({ id = 'axon' }: { id?: string }) {
         strokeWidth="1.6"
       />
 
-      {/* route caption, anchored to the origin */}
+      {/* Route key, placed in the clear space beside the record plane where the
+          route terminates — a leader line back to the origin would have to cross
+          the whole assembly. */}
       <g>
-        <line
-          x1={routePts[0][0]}
-          y1={routePts[0][1]}
-          x2={routePts[0][0] - 52}
-          y2={routePts[0][1] - 30}
-          stroke="#d64221"
-          strokeWidth="1"
-          strokeOpacity="0.6"
-        />
-        <text
-          x={routePts[0][0] - 56}
-          y={routePts[0][1] - 34}
-          fontSize="9"
-          fill="#d64221"
-          textAnchor="end"
-        >
+        <line x1="-205" y1="207" x2="-183" y2="207" stroke="#d64221" strokeWidth="1.8" />
+        <text x="-176" y="210" fontSize="9" fill="#d64221">
           REQ-2418
         </text>
-        <text
-          x={routePts[0][0] - 56}
-          y={routePts[0][1] - 22}
-          fontSize="8"
-          fill="#6d8480"
-          textAnchor="end"
-        >
-          one request, traced
+        <text x="-205" y="226" fontSize="8" fill="#6d8480">
+          one request, traced end to end
         </text>
       </g>
     </svg>

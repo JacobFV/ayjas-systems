@@ -39,20 +39,20 @@ export function Masthead() {
         </button>
       </div>
 
-      {open && (
-        <div className="drawer" id="mobile-nav">
-          <nav className="wrap drawer__list" aria-label="Primary, mobile">
-            {nav.map((n) => (
-              <NavLink key={n.to} to={n.to} className="drawer__item">
-                {n.label}
-              </NavLink>
-            ))}
-            <NavLink to="/contact" className="drawer__item">
-              Contact &amp; procurement brief
+      {/* Always in the DOM so `aria-controls` always resolves; `hidden` keeps it
+          out of the accessibility tree and the tab order when closed. */}
+      <div className="drawer" id="mobile-nav" hidden={!open}>
+        <nav className="wrap drawer__list" aria-label="Primary, mobile">
+          {nav.map((n) => (
+            <NavLink key={n.to} to={n.to} className="drawer__item">
+              {n.label}
             </NavLink>
-          </nav>
-        </div>
-      )}
+          ))}
+          <NavLink to="/contact" className="drawer__item">
+            Contact &amp; procurement brief
+          </NavLink>
+        </nav>
+      </div>
     </header>
   )
 }
