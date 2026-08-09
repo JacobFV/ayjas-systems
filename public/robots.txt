@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jacobfv.github.io/ayjas-systems/sitemap.xml
