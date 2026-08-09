@@ -486,7 +486,7 @@ export default function Home() {
       {/* ------------------------------------------------------- 1.9 enquiry */}
       <section className="sheet panel-ink section--tight" id="enquiry">
         <div className="wrap">
-          <SectionHead no="1.9" aside="§ 7" title="Requesting a brief" />
+          <SectionHead no="1.9" aside="continues at § 7" title="Requesting a brief" />
           <div className="closer">
             <div>
               <p className="lede" style={{ maxWidth: '46ch' }}>

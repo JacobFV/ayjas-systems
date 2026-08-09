@@ -775,11 +775,8 @@ a.xref:hover {
   border-color: currentColor;
 }
 .chip--scoped {
-  color: var(--boundary);
+  color: var(--fg);
   border-color: currentColor;
-}
-.panel-ink .chip--scoped {
-  color: var(--boundary-line);
 }
 .chip--designed {
   color: var(--fg-dim);
